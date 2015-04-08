@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="DynamicBlurViewExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
+                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MdZ-HQ-ZcP">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </webView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SdK-K1-MDF" customClass="DynamicBlurView" customModule="DynamicBlurView">
+                                <rect key="frame" x="0.0" y="0.0" width="188" height="667"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aT5-dc-UO4">
+                                <rect key="frame" x="60" y="470" width="69" height="30"/>
+                                <state key="normal" title="Animation">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonTap:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="1i4-Um-chG"/>
+                                </connections>
+                            </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Vb-cD-qTf">
+                                <rect key="frame" x="70" y="538" width="51" height="31"/>
+                                <connections>
+                                    <action selector="switchChange:" destination="vXZ-lx-hvc" eventType="valueChanged" id="uSs-EO-AgF"/>
+                                </connections>
+                            </switch>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="30" minValue="0.0" maxValue="30" translatesAutoresizingMaskIntoConstraints="NO" id="gkf-Vk-lCW">
+                                <rect key="frame" x="31" y="608" width="118" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="114" id="g3a-N1-ExB"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="sliderChange:" destination="vXZ-lx-hvc" eventType="valueChanged" id="hgL-uk-dLx"/>
+                                </connections>
+                            </slider>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="SdK-K1-MDF" secondAttribute="bottom" id="7Uz-oE-cgp"/>
+                            <constraint firstItem="SdK-K1-MDF" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="D7Z-pV-CVz"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="gkf-Vk-lCW" secondAttribute="bottom" constant="29" id="GT1-kH-ny8"/>
+                            <constraint firstItem="SdK-K1-MDF" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="N3H-JZ-kcS"/>
+                            <constraint firstItem="gkf-Vk-lCW" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="33" id="SjU-L6-zEJ"/>
+                            <constraint firstAttribute="trailing" secondItem="MdZ-HQ-ZcP" secondAttribute="trailing" id="WOE-N8-iVu"/>
+                            <constraint firstItem="7Vb-cD-qTf" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="70" id="e9p-DI-zuL"/>
+                            <constraint firstAttribute="trailing" secondItem="SdK-K1-MDF" secondAttribute="trailing" constant="187" id="hp1-ip-uzP"/>
+                            <constraint firstItem="MdZ-HQ-ZcP" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="lA1-Bf-VO7"/>
+                            <constraint firstItem="MdZ-HQ-ZcP" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="lMH-Qu-EVd"/>
+                            <constraint firstItem="aT5-dc-UO4" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="60" id="rxm-0e-FmK"/>
+                            <constraint firstItem="7Vb-cD-qTf" firstAttribute="top" secondItem="aT5-dc-UO4" secondAttribute="bottom" constant="38" id="sGd-d8-FTK"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="MdZ-HQ-ZcP" secondAttribute="bottom" id="sZY-KD-N2c"/>
+                            <constraint firstItem="gkf-Vk-lCW" firstAttribute="top" secondItem="7Vb-cD-qTf" secondAttribute="bottom" constant="39" id="tlZ-El-DD0"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="blurView" destination="SdK-K1-MDF" id="gd1-JN-Rr0"/>
+                        <outlet property="slider" destination="gkf-Vk-lCW" id="l1P-Uc-bdw"/>
+                        <outlet property="webView" destination="MdZ-HQ-ZcP" id="QBz-Hl-wkL"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="293.5" y="381.5"/>
+        </scene>
+    </scenes>
+</document>
