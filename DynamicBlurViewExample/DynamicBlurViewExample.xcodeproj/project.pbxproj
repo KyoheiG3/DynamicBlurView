@@ -486,6 +486,7 @@
 				C7F310BB1AD5778E006D95AD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C7F310BC1AD5778E006D95AD /* Build configuration list for PBXNativeTarget "DynamicBlurViewExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -494,6 +495,7 @@
 				C7F310BE1AD5778E006D95AD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

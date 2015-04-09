@@ -39,7 +39,7 @@ public class DynamicBlurView: UIView {
     private var displayLink: CADisplayLink?
     private let DisplayLinkSelector: Selector = "displayDidRefresh:"
     private var blurLayer: BlurLayer {
-        return layer as BlurLayer
+        return layer as! BlurLayer
     }
     
     private var blurPresentationLayer: BlurLayer {
@@ -153,7 +153,7 @@ public class DynamicBlurView: UIView {
     private func prepareLayer() -> [CALayer]? {
         let sublayers = superview?.layer.sublayers as? [CALayer]
         
-        return sublayers?.reduce([], { acc, layer -> [CALayer] in
+        return sublayers?.reduce([], combine: { acc, layer -> [CALayer] in
             if acc.isEmpty {
                 if layer != self.blurLayer {
                     return acc
@@ -216,14 +216,14 @@ private extension UIImage {
         let bytes = rowBytes * height
         
         let inData = malloc(bytes)
-        var inBuffer = vImage_Buffer(data: inData, height: height, width: width, rowBytes: rowBytes)
+        var inBuffer = vImage_Buffer(data: inData, height: UInt(height), width: UInt(width), rowBytes: rowBytes)
         
         let outData = malloc(bytes)
-        var outBuffer = vImage_Buffer(data: outData, height: height, width: width, rowBytes: rowBytes)
+        var outBuffer = vImage_Buffer(data: outData, height: UInt(height), width: UInt(width), rowBytes: rowBytes)
         
         let tempFlags = vImage_Flags(kvImageEdgeExtend + kvImageGetTempBufferSize)
         let tempSize = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, nil, 0, 0, boxSize, boxSize, nil, tempFlags)
-        let tempBuffer = malloc(UInt(tempSize))
+        let tempBuffer = malloc(tempSize)
         
         let provider = CGImageGetDataProvider(imageRef)
         let copy = CGDataProviderCopyData(provider)
@@ -244,7 +244,7 @@ private extension UIImage {
         
         let space = CGImageGetColorSpace(imageRef)
         let bitmapInfo = CGImageGetBitmapInfo(imageRef)
-        let ctx = CGBitmapContextCreate(inBuffer.data, inBuffer.width, inBuffer.height, 8, inBuffer.rowBytes, space, bitmapInfo)
+        let ctx = CGBitmapContextCreate(inBuffer.data, Int(inBuffer.width), Int(inBuffer.height), 8, inBuffer.rowBytes, space, bitmapInfo)
         
         let bitmap = CGBitmapContextCreateImage(ctx);
         let image = UIImage(CGImage: bitmap, scale: scale, orientation: imageOrientation)
