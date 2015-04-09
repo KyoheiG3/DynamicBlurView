@@ -22,6 +22,14 @@ DynamicBlurView is a dynamic and high performance UIView subclass for Blur.
 
 ### iOS 8+
 
+#### Cocoapods
+
+Add the following to your `Podfile`:
+
+```Ruby
+pod "DynamicBlurView"
+```
+
 #### Using Carthage
 
 Add the following to your `Cartfile`:
