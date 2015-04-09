@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -20,11 +20,15 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </webView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SdK-K1-MDF" customClass="DynamicBlurView" customModule="DynamicBlurView">
-                                <rect key="frame" x="0.0" y="0.0" width="188" height="667"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Npj-2J-f3B" userLabel="Animation View" customClass="DynamicBlurView" customModule="DynamicBlurView">
+                                <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="2Ry-8B-wFm"/>
+                                    <constraint firstAttribute="width" constant="150" id="LCA-6s-1pP"/>
+                                </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aT5-dc-UO4">
-                                <rect key="frame" x="60" y="470" width="69" height="30"/>
+                                <rect key="frame" x="41" y="60" width="69" height="30"/>
                                 <state key="normal" title="Animation">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -32,14 +36,28 @@
                                     <action selector="buttonTap:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="1i4-Um-chG"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p6l-oi-APS" userLabel="Dynamic View" customClass="DynamicBlurView" customModule="DynamicBlurView">
+                                <rect key="frame" x="0.0" y="259" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="gbF-uI-wSO"/>
+                                    <constraint firstAttribute="width" constant="150" id="x4L-co-jKy"/>
+                                </constraints>
+                            </view>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Vb-cD-qTf">
-                                <rect key="frame" x="70" y="538" width="51" height="31"/>
+                                <rect key="frame" x="51" y="318" width="51" height="31"/>
                                 <connections>
                                     <action selector="switchChange:" destination="vXZ-lx-hvc" eventType="valueChanged" id="uSs-EO-AgF"/>
                                 </connections>
                             </switch>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jAw-C3-hjM" userLabel="Variable View" customClass="DynamicBlurView" customModule="DynamicBlurView">
+                                <rect key="frame" x="0.0" y="517" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="fGz-1i-tcd"/>
+                                    <constraint firstAttribute="height" constant="150" id="i6I-dd-WUI"/>
+                                </constraints>
+                            </view>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="30" minValue="0.0" maxValue="30" translatesAutoresizingMaskIntoConstraints="NO" id="gkf-Vk-lCW">
-                                <rect key="frame" x="31" y="608" width="118" height="31"/>
+                                <rect key="frame" x="14" y="577" width="118" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="114" id="g3a-N1-ExB"/>
                                 </constraints>
@@ -50,26 +68,30 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="SdK-K1-MDF" secondAttribute="bottom" id="7Uz-oE-cgp"/>
-                            <constraint firstItem="SdK-K1-MDF" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="D7Z-pV-CVz"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="gkf-Vk-lCW" secondAttribute="bottom" constant="29" id="GT1-kH-ny8"/>
-                            <constraint firstItem="SdK-K1-MDF" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="N3H-JZ-kcS"/>
-                            <constraint firstItem="gkf-Vk-lCW" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="33" id="SjU-L6-zEJ"/>
+                            <constraint firstItem="7Vb-cD-qTf" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="51" id="0Jw-IC-MOx"/>
+                            <constraint firstItem="p6l-oi-APS" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="1RD-b6-evQ"/>
+                            <constraint firstItem="jAw-C3-hjM" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="5kQ-27-6hn"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="gkf-Vk-lCW" secondAttribute="bottom" constant="60" id="GT1-kH-ny8"/>
+                            <constraint firstItem="Npj-2J-f3B" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="PuS-Sz-d8V"/>
+                            <constraint firstAttribute="centerY" secondItem="p6l-oi-APS" secondAttribute="centerY" id="Q0T-t0-fKY"/>
+                            <constraint firstItem="gkf-Vk-lCW" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="SjU-L6-zEJ"/>
+                            <constraint firstItem="Npj-2J-f3B" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="W1o-uH-CmE"/>
                             <constraint firstAttribute="trailing" secondItem="MdZ-HQ-ZcP" secondAttribute="trailing" id="WOE-N8-iVu"/>
-                            <constraint firstItem="7Vb-cD-qTf" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="70" id="e9p-DI-zuL"/>
-                            <constraint firstAttribute="trailing" secondItem="SdK-K1-MDF" secondAttribute="trailing" constant="187" id="hp1-ip-uzP"/>
+                            <constraint firstItem="aT5-dc-UO4" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="40" id="cWA-8a-S5W"/>
+                            <constraint firstItem="aT5-dc-UO4" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="41" id="fwM-fY-sUe"/>
                             <constraint firstItem="MdZ-HQ-ZcP" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="lA1-Bf-VO7"/>
                             <constraint firstItem="MdZ-HQ-ZcP" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="lMH-Qu-EVd"/>
-                            <constraint firstItem="aT5-dc-UO4" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="60" id="rxm-0e-FmK"/>
-                            <constraint firstItem="7Vb-cD-qTf" firstAttribute="top" secondItem="aT5-dc-UO4" secondAttribute="bottom" constant="38" id="sGd-d8-FTK"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="MdZ-HQ-ZcP" secondAttribute="bottom" id="sZY-KD-N2c"/>
-                            <constraint firstItem="gkf-Vk-lCW" firstAttribute="top" secondItem="7Vb-cD-qTf" secondAttribute="bottom" constant="39" id="tlZ-El-DD0"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="jAw-C3-hjM" secondAttribute="bottom" id="tDd-dO-hR0"/>
+                            <constraint firstAttribute="centerY" secondItem="7Vb-cD-qTf" secondAttribute="centerY" id="yEF-Xw-Xe1"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
-                        <outlet property="blurView" destination="SdK-K1-MDF" id="gd1-JN-Rr0"/>
+                        <outlet property="animationView" destination="Npj-2J-f3B" id="0qS-Xs-dgO"/>
+                        <outlet property="dynamicView" destination="p6l-oi-APS" id="zGY-GB-VNd"/>
                         <outlet property="slider" destination="gkf-Vk-lCW" id="l1P-Uc-bdw"/>
+                        <outlet property="variableView" destination="jAw-C3-hjM" id="6OV-IA-Iyl"/>
                         <outlet property="webView" destination="MdZ-HQ-ZcP" id="QBz-Hl-wkL"/>
                     </connections>
                 </viewController>

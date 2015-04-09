@@ -11,38 +11,46 @@ import DynamicBlurView
 
 class ViewController: UIViewController, UIWebViewDelegate {
     @IBOutlet weak var webView: UIWebView!
-    @IBOutlet weak var blurView: DynamicBlurView!
     @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak var animationView: DynamicBlurView!
+    @IBOutlet weak var dynamicView: DynamicBlurView!
+    @IBOutlet weak var variableView: DynamicBlurView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        blurView.dynamicMode = .Common
-        blurView.blurRadius = CGFloat(slider.maximumValue)
+        animationView.dynamicMode = .Common
+        animationView.blurRadius = CGFloat(slider.maximumValue)
+        
+        dynamicView.dynamicMode = .Common
+        dynamicView.blurRadius = CGFloat(slider.maximumValue)
+        
+        variableView.dynamicMode = .Common
+        variableView.blurRadius = CGFloat(slider.maximumValue)
         
         webView.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.google.com")!))
     }
 
     @IBAction func buttonTap(sender: UIButton) {
         UIView.animateWithDuration(0.5, animations: {
-            self.blurView.blurRadius = 0
+            self.animationView.blurRadius = 0
             }, completion: { _ in
                 UIView.animateWithDuration(0.5) {
-                    self.blurView.blurRadius = CGFloat(self.slider.value)
+                    self.animationView.blurRadius = CGFloat(self.slider.value)
                 }
         })
     }
     
     @IBAction func switchChange(sender: UISwitch) {
         if sender.on {
-            blurView.dynamicMode = .Common
+            dynamicView.dynamicMode = .Common
         } else {
-            blurView.dynamicMode = .Tracking
+            dynamicView.dynamicMode = .Tracking
         }
     }
     
     @IBAction func sliderChange(sender: UISlider) {
-        blurView.blurRadius = CGFloat(sender.value)
+        variableView.blurRadius = CGFloat(sender.value)
     }
 }
 
