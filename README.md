@@ -28,9 +28,11 @@ Add the following to your `Podfile`:
 
 ```Ruby
 pod "DynamicBlurView"
+use_frameworks!
 ```
+Note: the `use_frameworks!` is required for pods made in Swift.
 
-#### Using Carthage
+#### Carthage
 
 Add the following to your `Cartfile`:
 
