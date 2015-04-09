@@ -7,10 +7,10 @@
 
 DynamicBlurView is a dynamic and high performance UIView subclass for Blur.
 
-* Demo gif
+* Demo gif  
 ![Gif](https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/blur_view.gif)
 
-* Image capture
+* Image capture  
 ![Gif](https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/blur_view.png)
 
 
@@ -75,7 +75,7 @@ var dynamicMode: DynamicBlurView.DynamicMode
 ```
 * Mode for update frequency.
 * `Common` is constantly updated.
-* `Tracking` is only during scrolling update.
+* `Tracking` is only during scrolling update.  
 Animation block is always updated.
 
 ```swift
