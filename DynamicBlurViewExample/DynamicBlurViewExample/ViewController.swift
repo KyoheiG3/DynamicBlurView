@@ -19,13 +19,11 @@ class ViewController: UIViewController, UIWebViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        animationView.dynamicMode = .Common
         animationView.blurRadius = CGFloat(slider.maximumValue)
         
         dynamicView.dynamicMode = .Common
         dynamicView.blurRadius = CGFloat(slider.maximumValue)
         
-        variableView.dynamicMode = .Common
         variableView.blurRadius = CGFloat(slider.maximumValue)
         
         webView.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.google.com")!))

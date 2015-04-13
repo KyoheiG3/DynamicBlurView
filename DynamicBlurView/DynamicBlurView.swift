@@ -24,6 +24,7 @@ public class DynamicBlurView: UIView {
     public enum DynamicMode {
         case Tracking   // only scrolling
         case Common     // full refreshing
+        case None       // stop refreshing
         
         func mode() -> String {
             switch self {
@@ -31,6 +32,8 @@ public class DynamicBlurView: UIView {
                 return UITrackingRunLoopMode
             case .Common:
                 return NSRunLoopCommonModes
+            case .None:
+                return ""
             }
         }
     }
@@ -56,7 +59,7 @@ public class DynamicBlurView: UIView {
     }
     
     /// Default is Tracking.
-    public var dynamicMode: DynamicMode = .Tracking {
+    public var dynamicMode: DynamicMode = .None {
         didSet {
             if dynamicMode != oldValue {
                 linkForDisplay()
