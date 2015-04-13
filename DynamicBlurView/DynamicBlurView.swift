@@ -124,19 +124,26 @@ public class DynamicBlurView: UIView {
     }
     
     public override func displayLayer(layer: CALayer!) {
-        var blurRadius = blurPresentationLayer.blurRadius
+        let blurRadius: CGFloat
         
         if let radius = fromBlurRadius {
             if layer.presentationLayer() == nil {
                 blurRadius = radius
+            } else {
+                blurRadius = blurPresentationLayer.blurRadius
             }
         } else {
             blurRadius = blurLayer.blurRadius
         }
         
-        let blurredImag = capturedImage().blurredImage(blurRadius, iterations: iterations)
-        
-        setContentImage(blurredImag)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            if let blurredImage = self.capturedImage()?.blurredImage(blurRadius, iterations: self.iterations) {
+                
+                dispatch_sync(dispatch_get_main_queue()) {
+                    self.setContentImage(blurredImage)
+                }
+            }
+        }
     }
     
     private func linkForDisplay() {
@@ -174,23 +181,35 @@ public class DynamicBlurView: UIView {
         layers.map { $0.hidden = false }
     }
     
-    private func capturedImage() -> UIImage {
+    private func capturedImage() -> UIImage! {
         let bounds = blurLayer.convertRect(blurLayer.bounds, toLayer: superview?.layer)
         
-        UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0)
+        UIGraphicsBeginImageContextWithOptions(bounds.size, true, 1)
         let context = UIGraphicsGetCurrentContext()
         CGContextTranslateCTM(context, -bounds.origin.x, -bounds.origin.y)
         
-        let layers = prepareLayer()
-        superview?.layer.renderInContext(context)
-        if let layers = layers {
-            restoreLayer(layers)
+        if NSThread.currentThread().isMainThread {
+            renderInContext(context)
+        } else {
+            dispatch_sync(dispatch_get_main_queue()) {
+                self.renderInContext(context)
+            }
         }
-        
+
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
         return image
+    }
+    
+    private func renderInContext(ctx: CGContext!) {
+        let layers = prepareLayer()
+        
+        superview?.layer.renderInContext(ctx)
+        
+        if let layers = layers {
+            restoreLayer(layers)
+        }
     }
     
     func displayDidRefresh(displayLink: CADisplayLink) {
