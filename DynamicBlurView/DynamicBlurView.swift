@@ -38,6 +38,7 @@ public class DynamicBlurView: UIView {
         }
     }
     
+    private var staticImage: UIImage?
     private var fromBlurRadius: CGFloat?
     private var displayLink: CADisplayLink?
     private let DisplayLinkSelector: Selector = "displayDidRefresh:"
@@ -70,6 +71,9 @@ public class DynamicBlurView: UIView {
     /// Default is 3.
     public var iterations: Int = 3
     
+    /// Please be on true if the if Layer is not captured. Such as UINavigationBar and UIToolbar. Can be used only with DynamicMode.None.
+    public var fullScreenCapture: Bool = false
+    
     public override class func layerClass() -> AnyClass {
         return BlurLayer.self
     }
@@ -100,9 +104,14 @@ public class DynamicBlurView: UIView {
     public override func actionForLayer(layer: CALayer!, forKey event: String!) -> CAAction! {
         if event == "blurRadius" {
             fromBlurRadius = nil
+            staticImage = nil
             
             if let action = super.actionForLayer(layer, forKey: "backgroundColor") as? CAAnimation {
                 fromBlurRadius = blurPresentationLayer.blurRadius
+                
+                if dynamicMode == .None {
+                    staticImage = capturedImage()
+                }
                 
                 let animation = CABasicAnimation()
                 animation.fromValue = fromBlurRadius
@@ -140,13 +149,27 @@ public class DynamicBlurView: UIView {
         }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            if let blurredImage = self.capturedImage()?.blurredImage(blurRadius, iterations: self.iterations) {
-                
-                dispatch_sync(dispatch_get_main_queue()) {
-                    self.setContentImage(blurredImage)
+            if let capture = self.staticImage ?? self.capturedImage() {
+                if let blurredImage = capture.blurredImage(blurRadius, iterations: self.iterations) {
+                    
+                    dispatch_sync(dispatch_get_main_queue()) {
+                        self.setContentImage(blurredImage)
+                    }
                 }
             }
         }
+    }
+    
+    /// Get blur image again.
+    public func refresh() {
+        staticImage = nil
+        fromBlurRadius = nil
+        displayLayer(blurLayer)
+    }
+    
+    /// Delete blur image.
+    public func remove() {
+        layer.contents = nil
     }
     
     private func linkForDisplay() {
@@ -208,7 +231,15 @@ public class DynamicBlurView: UIView {
     private func renderInContext(ctx: CGContext!) {
         let layers = prepareLayer()
         
-        superview?.layer.renderInContext(ctx)
+        if fullScreenCapture && dynamicMode == .None {
+            if let superview = superview {
+                UIView.setAnimationsEnabled(false)
+                superview.drawViewHierarchyInRect(superview.bounds, afterScreenUpdates: true)
+                UIView.setAnimationsEnabled(true)
+            }
+        } else {
+            superview?.layer.renderInContext(ctx)
+        }
         
         if let layers = layers {
             restoreLayer(layers)
