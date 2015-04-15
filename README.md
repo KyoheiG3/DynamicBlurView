@@ -8,10 +8,10 @@
 DynamicBlurView is a dynamic and high performance UIView subclass for Blur.
 
 * Demo gif  
-![Gif](https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/blur_view.gif)
+![Gif](https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/home.gif)
 
 * Image capture  
-![Gif](https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/blur_view.png)
+![Gif](https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/home.png)
 
 
 * Since using the CADisplayLink, it is a high performance.
@@ -89,9 +89,41 @@ var dynamicMode: DynamicBlurView.DynamicMode
 Animation block is always updated.
 
 ```swift
+var blendColor: UIColor?
+```
+* Blend in the blurred image.
+
+```swift
 var iterations: Int
 ```
 * Number of times for blur.
+* Default is 3.
+
+```swift
+var fullScreenCapture: Bool
+```
+* Please be on true if the if Layer is not captured. Such as UINavigationBar and UIToolbar. Can be used only with DynamicMode.None.
+* Default is false.
+
+```swift
+var blurRatio: CGFloat
+```
+* Ratio of radius.
+* Defauot is 1.  
+
+
+### Function
+
+```swift
+func refresh()
+```
+* Get blur image again. for DynamicMode.None
+
+```swift
+func remove()
+```
+* Delete blur image. for DynamicMode.None
+
 
 ## Acknowledgements
 
