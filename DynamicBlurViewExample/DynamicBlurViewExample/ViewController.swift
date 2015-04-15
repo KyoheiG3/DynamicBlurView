@@ -9,46 +9,71 @@
 import UIKit
 import DynamicBlurView
 
-class ViewController: UIViewController, UIWebViewDelegate {
-    @IBOutlet weak var webView: UIWebView!
+class ViewController: UIViewController, UIScrollViewDelegate {
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var scrollBlurView: DynamicBlurView!
+    @IBOutlet weak var bottomBlurView: DynamicBlurView!
+    @IBOutlet weak var navigationBar: UIView!
     @IBOutlet weak var slider: UISlider!
-    @IBOutlet weak var animationView: DynamicBlurView!
-    @IBOutlet weak var dynamicView: DynamicBlurView!
-    @IBOutlet weak var variableView: DynamicBlurView!
-
+    
+    @IBOutlet weak var barTopConstraint: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        animationView.blurRadius = CGFloat(slider.maximumValue)
+        scrollView.contentInset.top = navigationBar.bounds.height
+        scrollView.contentOffset.y = 0
         
-        dynamicView.dynamicMode = .Common
-        dynamicView.blurRadius = CGFloat(slider.maximumValue)
+        scrollBlurView.blurRadius = CGFloat(slider.maximumValue)
+        scrollBlurView.iterations = 10
         
-        variableView.blurRadius = CGFloat(slider.maximumValue)
+        bottomBlurView.blurRadius = CGFloat(slider.maximumValue)
+        bottomBlurView.iterations = 10
         
-        webView.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.google.com")!))
+        barTopConstraint.constant = -scrollView.contentInset.top
+        navigationBar.backgroundColor = UIColor(white: 1, alpha: 0.3)
     }
-
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if scrollView.contentOffset.y < 0 {
+            scrollBlurView.alpha = 1
+            bottomBlurView.alpha = 1
+            
+            var ratio = abs(scrollView.contentOffset.y) / scrollView.contentInset.top
+            if ratio > 1 {
+                ratio = 1
+                barTopConstraint.constant = 0
+            } else {
+                barTopConstraint.constant = -(scrollView.contentInset.top - abs(scrollView.contentOffset.y))
+            }
+            
+            scrollBlurView.blurRatio = ratio
+            bottomBlurView.blurRatio = ratio
+        } else {
+            scrollBlurView.alpha = 0
+            bottomBlurView.alpha = 0
+            barTopConstraint.constant = -scrollView.contentInset.top
+        }
+    }
+    
     @IBAction func buttonTap(sender: UIButton) {
         UIView.animateWithDuration(0.5, animations: {
-            self.animationView.blurRadius = 0
+            self.scrollBlurView.blurRadius = 0
+            self.bottomBlurView.blurRadius = 0
             }, completion: { _ in
                 UIView.animateWithDuration(0.5) {
-                    self.animationView.blurRadius = CGFloat(self.slider.value)
+                    self.scrollBlurView.blurRadius = CGFloat(self.slider.value)
+                    self.bottomBlurView.blurRadius = CGFloat(self.slider.value)
                 }
         })
     }
     
-    @IBAction func switchChange(sender: UISwitch) {
-        if sender.on {
-            dynamicView.dynamicMode = .Common
-        } else {
-            dynamicView.dynamicMode = .Tracking
-        }
-    }
-    
     @IBAction func sliderChange(sender: UISlider) {
-        variableView.blurRadius = CGFloat(sender.value)
+        scrollBlurView.blurRadius = CGFloat(sender.value)
+        bottomBlurView.blurRadius = CGFloat(sender.value)
     }
 }
-
