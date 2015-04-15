@@ -77,6 +77,7 @@ public class DynamicBlurView: UIView {
     /// Please be on true if the if Layer is not captured. Such as UINavigationBar and UIToolbar. Can be used only with DynamicMode.None.
     public var fullScreenCapture: Bool = false
     
+    /// Ratio of radius. Defauot is 1.
     public var blurRatio: CGFloat = 1 {
         didSet {
             if oldValue != blurRatio {
@@ -169,7 +170,7 @@ public class DynamicBlurView: UIView {
         }
     }
     
-    /// Get blur image again.
+    /// Get blur image again. for DynamicMode.None
     public func refresh() {
         staticImage = nil
         fromBlurRadius = nil
@@ -177,7 +178,7 @@ public class DynamicBlurView: UIView {
         displayLayer(blurLayer)
     }
     
-    /// Delete blur image.
+    /// Delete blur image. for DynamicMode.None
     public func remove() {
         staticImage = nil
         fromBlurRadius = nil
