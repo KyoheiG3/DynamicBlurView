@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "DynamicBlurView"
-  s.version      = "0.8.1"
+  s.version      = "0.9.1"
   s.summary      = "DynamicBlurView is a dynamic and high performance UIView subclass for Blur."
   s.homepage     = "https://github.com/KyoheiG3/DynamicBlurView"
   s.license      = { :type => "MIT", :file => "LICENSE" }
