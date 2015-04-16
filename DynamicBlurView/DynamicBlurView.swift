@@ -22,9 +22,9 @@ public class DynamicBlurView: UIView {
     }
     
     public enum DynamicMode {
-        case Tracking   // only scrolling
-        case Common     // full refreshing
-        case None       // stop refreshing
+        case Tracking   // refresh only scrolling
+        case Common     // always refresh
+        case None       // not refresh
         
         func mode() -> String {
             switch self {

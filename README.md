@@ -86,7 +86,7 @@ var dynamicMode: DynamicBlurView.DynamicMode
 * Mode for update frequency.
 * `Common` is constantly updated.
 * `Tracking` is only during scrolling update.  
-Animation block is always updated.
+* `None` is not update.
 
 ```swift
 var blendColor: UIColor?
