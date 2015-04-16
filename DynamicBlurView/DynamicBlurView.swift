@@ -281,7 +281,7 @@ public class DynamicBlurView: UIView {
     }
 }
 
-private extension UIImage {
+public extension UIImage {
     func blurredImage(radius: CGFloat, iterations: Int, ratio: CGFloat, blendColor: UIColor?) -> UIImage! {
         if floorf(Float(size.width)) * floorf(Float(size.height)) <= 0.0 {
             return self
