@@ -242,6 +242,7 @@ public class DynamicBlurView: UIView {
         
         UIGraphicsBeginImageContextWithOptions(bounds.size, true, 1)
         let context = UIGraphicsGetCurrentContext()
+        CGContextSetInterpolationQuality(context, kCGInterpolationNone)
         CGContextTranslateCTM(context, -bounds.origin.x, -bounds.origin.y)
         
         if NSThread.currentThread().isMainThread {
@@ -325,19 +326,21 @@ public extension UIImage {
         free(outBuffer.data)
         free(tempBuffer)
         
-        let space = CGImageGetColorSpace(imageRef)
+        let colorSpace = CGImageGetColorSpace(imageRef)
         let bitmapInfo = CGImageGetBitmapInfo(imageRef)
-        let ctx = CGBitmapContextCreate(inBuffer.data, Int(inBuffer.width), Int(inBuffer.height), 8, inBuffer.rowBytes, space, bitmapInfo)
         
         if let color = blendColor {
-            CGContextSetFillColorWithColor(ctx, color.CGColor)
-            CGContextSetBlendMode(ctx, kCGBlendModeNormal)
-            CGContextFillRect(ctx, CGRect(x: 0, y: 0, width: width, height: height))
+            let bitmapContext = CGBitmapContextCreate(inBuffer.data, width, height, 8, rowBytes, colorSpace, bitmapInfo)
+            CGContextSetFillColorWithColor(bitmapContext, color.CGColor)
+            CGContextSetBlendMode(bitmapContext, kCGBlendModeNormal)
+            CGContextFillRect(bitmapContext, CGRect(x: 0, y: 0, width: width, height: height))
         }
         
-        let bitmap = CGBitmapContextCreateImage(ctx);
-        let image = UIImage(CGImage: bitmap, scale: scale, orientation: imageOrientation)
+        let bitmapProvider = CGDataProviderCreateWithData(nil, inBuffer.data, bytes, nil)
         free(inBuffer.data)
+        
+        let bitmap = CGImageCreate(width, height, 8, 32, rowBytes, colorSpace, bitmapInfo, bitmapProvider, nil, false, kCGRenderingIntentDefault)
+        let image = UIImage(CGImage: bitmap, scale: scale, orientation: imageOrientation)
         
         return image
     }
