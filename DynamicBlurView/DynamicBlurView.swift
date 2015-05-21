@@ -328,19 +328,17 @@ public extension UIImage {
         
         let colorSpace = CGImageGetColorSpace(imageRef)
         let bitmapInfo = CGImageGetBitmapInfo(imageRef)
+        let bitmapContext = CGBitmapContextCreate(inBuffer.data, width, height, 8, rowBytes, colorSpace, bitmapInfo)
         
         if let color = blendColor {
-            let bitmapContext = CGBitmapContextCreate(inBuffer.data, width, height, 8, rowBytes, colorSpace, bitmapInfo)
             CGContextSetFillColorWithColor(bitmapContext, color.CGColor)
             CGContextSetBlendMode(bitmapContext, kCGBlendModeNormal)
             CGContextFillRect(bitmapContext, CGRect(x: 0, y: 0, width: width, height: height))
         }
         
-        let bitmapProvider = CGDataProviderCreateWithData(nil, inBuffer.data, bytes, nil)
-        free(inBuffer.data)
-        
-        let bitmap = CGImageCreate(width, height, 8, 32, rowBytes, colorSpace, bitmapInfo, bitmapProvider, nil, false, kCGRenderingIntentDefault)
+        let bitmap = CGBitmapContextCreateImage(bitmapContext)
         let image = UIImage(CGImage: bitmap, scale: scale, orientation: imageOrientation)
+        free(inBuffer.data)
         
         return image
     }
