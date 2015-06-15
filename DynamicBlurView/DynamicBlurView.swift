@@ -130,7 +130,7 @@ public class DynamicBlurView: UIView {
                 
                 let animation = CABasicAnimation()
                 animation.fromValue = fromBlurRadius
-                animation.beginTime = action.beginTime
+                animation.beginTime = CACurrentMediaTime() + action.beginTime
                 animation.duration = action.duration
                 animation.speed = action.speed
                 animation.timeOffset = action.timeOffset
