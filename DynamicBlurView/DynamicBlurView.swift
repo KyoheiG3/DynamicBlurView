@@ -332,7 +332,7 @@ public extension UIImage {
         
         if let color = blendColor {
             CGContextSetFillColorWithColor(bitmapContext, color.CGColor)
-            CGContextSetBlendMode(bitmapContext, kCGBlendModeNormal)
+            CGContextSetBlendMode(bitmapContext, kCGBlendModePlusLighter)
             CGContextFillRect(bitmapContext, CGRect(x: 0, y: 0, width: width, height: height))
         }
         
