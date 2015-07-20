@@ -98,7 +98,7 @@ public class DynamicBlurView: UIView {
         userInteractionEnabled = false
     }
     
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
         userInteractionEnabled = false
@@ -115,7 +115,7 @@ public class DynamicBlurView: UIView {
         }
     }
     
-    public override func actionForLayer(layer: CALayer!, forKey event: String!) -> CAAction! {
+    public override func actionForLayer(layer: CALayer, forKey event: String) -> CAAction? {
         if event == "blurRadius" {
             fromBlurRadius = nil
             
@@ -150,7 +150,7 @@ public class DynamicBlurView: UIView {
         return super.actionForLayer(layer, forKey: event)
     }
     
-    public override func displayLayer(layer: CALayer!) {
+    public override func displayLayer(layer: CALayer) {
         let blurRadius: CGFloat
         
         if let radius = fromBlurRadius {
@@ -193,7 +193,7 @@ public class DynamicBlurView: UIView {
     }
     
     private func setCaptureImage(image: UIImage, radius: CGFloat) {
-        var setImage: (() -> Void) = {
+        let setImage: (() -> Void) = {
             if let blurredImage = image.blurredImage(radius, iterations: self.iterations, ratio: self.blurRatio, blendColor: self.blendColor) {
                 dispatch_sync(dispatch_get_main_queue()) {
                     self.setContentImage(blurredImage)
@@ -214,7 +214,7 @@ public class DynamicBlurView: UIView {
     }
     
     private func prepareLayer() -> [CALayer]? {
-        let sublayers = superview?.layer.sublayers as? [CALayer]
+        let sublayers = superview?.layer.sublayers
         
         return sublayers?.reduce([], combine: { acc, layer -> [CALayer] in
             if acc.isEmpty {
@@ -242,7 +242,7 @@ public class DynamicBlurView: UIView {
         
         UIGraphicsBeginImageContextWithOptions(bounds.size, true, 1)
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetInterpolationQuality(context, kCGInterpolationNone)
+        CGContextSetInterpolationQuality(context, CGInterpolationQuality.None)
         CGContextTranslateCTM(context, -bounds.origin.x, -bounds.origin.y)
         
         if NSThread.currentThread().isMainThread {
@@ -315,7 +315,7 @@ public extension UIImage {
         memcpy(inBuffer.data, source, bytes)
         
         let flags = vImage_Flags(kvImageEdgeExtend)
-        for index in 0 ..< iterations {
+        for _ in 0 ..< iterations {
             vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, tempBuffer, 0, 0, boxSize, boxSize, nil, flags)
             
             let temp = inBuffer.data
@@ -328,18 +328,19 @@ public extension UIImage {
         
         let colorSpace = CGImageGetColorSpace(imageRef)
         let bitmapInfo = CGImageGetBitmapInfo(imageRef)
-        let bitmapContext = CGBitmapContextCreate(inBuffer.data, width, height, 8, rowBytes, colorSpace, bitmapInfo)
+        let bitmapContext = CGBitmapContextCreate(inBuffer.data, width, height, 8, rowBytes, colorSpace, bitmapInfo.rawValue)
+        free(inBuffer.data)
         
         if let color = blendColor {
             CGContextSetFillColorWithColor(bitmapContext, color.CGColor)
-            CGContextSetBlendMode(bitmapContext, kCGBlendModePlusLighter)
+            CGContextSetBlendMode(bitmapContext, CGBlendMode.PlusLighter)
             CGContextFillRect(bitmapContext, CGRect(x: 0, y: 0, width: width, height: height))
         }
         
-        let bitmap = CGBitmapContextCreateImage(bitmapContext)
-        let image = UIImage(CGImage: bitmap, scale: scale, orientation: imageOrientation)
-        free(inBuffer.data)
+        if let bitmap = CGBitmapContextCreateImage(bitmapContext) {
+            return UIImage(CGImage: bitmap, scale: scale, orientation: imageOrientation)
+        }
         
-        return image
+        return nil
     }
 }
