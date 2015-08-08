@@ -284,7 +284,7 @@ public class DynamicBlurView: UIView {
 
 public extension UIImage {
     func blurredImage(radius: CGFloat, iterations: Int, ratio: CGFloat, blendColor: UIColor?) -> UIImage! {
-        if floorf(Float(size.width)) * floorf(Float(size.height)) <= 0.0 {
+        if floorf(Float(size.width)) * floorf(Float(size.height)) <= 0.0 || radius <= 0 {
             return self
         }
         
@@ -323,13 +323,15 @@ public extension UIImage {
             outBuffer.data = temp
         }
         
-        free(outBuffer.data)
-        free(tempBuffer)
         
         let colorSpace = CGImageGetColorSpace(imageRef)
         let bitmapInfo = CGImageGetBitmapInfo(imageRef)
         let bitmapContext = CGBitmapContextCreate(inBuffer.data, width, height, 8, rowBytes, colorSpace, bitmapInfo.rawValue)
-        free(inBuffer.data)
+        defer {
+            free(outBuffer.data)
+            free(tempBuffer)
+            free(inBuffer.data)
+        }
         
         if let color = blendColor {
             CGContextSetFillColorWithColor(bitmapContext, color.CGColor)
