@@ -234,7 +234,9 @@ public class DynamicBlurView: UIView {
     }
     
     private func restoreLayer(layers: [CALayer]) {
-        layers.map { $0.hidden = false }
+        for layer in layers {
+            layer.hidden = false
+        }
     }
     
     private func capturedImage() -> UIImage! {
