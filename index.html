@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Dynamicblurview by KyoheiG3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Dynamicblurview</h1>
+      <h2 class="project-tagline">DynamicBlurView is a dynamic and high performance UIView subclass for Blur.</h2>
+      <a href="https://github.com/KyoheiG3/DynamicBlurView" class="btn">View on GitHub</a>
+      <a href="https://github.com/KyoheiG3/DynamicBlurView/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/KyoheiG3/DynamicBlurView/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="dynamicblurview" class="anchor" href="#dynamicblurview" aria-hidden="true"><span class="octicon octicon-link"></span></a>DynamicBlurView</h1>
+
+<p><a href="https://github.com/Carthage/Carthage/"><img src="https://img.shields.io/badge/carthage-%E2%9C%93-f2a77e.svg?style=flat" alt="Carthage Compatibility"></a>
+<a href="http://cocoadocs.org/docsets/DynamicBlurView"><img src="https://img.shields.io/cocoapods/v/DynamicBlurView.svg?style=flat" alt="Version"></a>
+<a href="http://cocoadocs.org/docsets/DynamicBlurView"><img src="https://img.shields.io/cocoapods/l/DynamicBlurView.svg?style=flat" alt="License"></a>
+<a href="http://cocoadocs.org/docsets/DynamicBlurView"><img src="https://img.shields.io/cocoapods/p/DynamicBlurView.svg?style=flat" alt="Platform"></a></p>
+
+<p>DynamicBlurView is a dynamic and high performance UIView subclass for Blur.</p>
+
+<ul>
+<li><p>Demo gif<br>
+<img src="https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/home.gif" alt="Gif"></p></li>
+<li><p>Image capture<br>
+<img src="https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/home.png" alt="Gif"></p></li>
+<li><p>Since using the CADisplayLink, it is a high performance.</p></li>
+<li>UIToolbar does not use.</li>
+<li>Can generate a plurality of BlurView.</li>
+</ul>
+
+<h2>
+<a id="how-to-install-dynamicblurview" class="anchor" href="#how-to-install-dynamicblurview" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to Install DynamicBlurView</h2>
+
+<h3>
+<a id="ios-8" class="anchor" href="#ios-8" aria-hidden="true"><span class="octicon octicon-link"></span></a>iOS 8+</h3>
+
+<h4>
+<a id="cocoapods" class="anchor" href="#cocoapods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cocoapods</h4>
+
+<p>Add the following to your <code>Podfile</code>:</p>
+
+<div class="highlight highlight-Ruby"><pre>pod <span class="pl-s"><span class="pl-pds">"</span>DynamicBlurView<span class="pl-pds">"</span></span>
+use_frameworks!</pre></div>
+
+<p>Note: the <code>use_frameworks!</code> is required for pods made in Swift.</p>
+
+<h4>
+<a id="carthage" class="anchor" href="#carthage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Carthage</h4>
+
+<p>Add the following to your <code>Cartfile</code>:</p>
+
+<div class="highlight highlight-Ruby"><pre>github <span class="pl-s"><span class="pl-pds">"</span>KyoheiG3/DynamicBlurView<span class="pl-pds">"</span></span></pre></div>
+
+<h3>
+<a id="ios-7" class="anchor" href="#ios-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>iOS 7</h3>
+
+<p>Just add everything in the <code>DynamicBlurView.swift</code> file to your project.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a id="import" class="anchor" href="#import" aria-hidden="true"><span class="octicon octicon-link"></span></a>import</h3>
+
+<p>If target is ios8.0 or later, please import the <code>DynamicBlurView</code>.</p>
+
+<div class="highlight highlight-Swift"><pre><span class="pl-k">import</span> <span class="pl-c1">DynamicBlurView</span></pre></div>
+
+<h3>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<p>Blur the whole</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-k">let</span> blurView <span class="pl-k">=</span> DynamicBlurView(frame: view<span class="pl-k">.</span>bounds)
+blurView<span class="pl-k">.</span>blurRadius <span class="pl-k">=</span> <span class="pl-c1">10</span>
+view<span class="pl-k">.</span>addSubview(blurView)</pre></div>
+
+<p>Animation</p>
+
+<div class="highlight highlight-swift"><pre>UIView<span class="pl-k">.</span>animateWithDuration(<span class="pl-c1">0</span><span class="pl-k">.</span><span class="pl-c1">5</span>) {
+    blurView<span class="pl-k">.</span>blurRadius <span class="pl-k">=</span> <span class="pl-c1">30</span>
+}</pre></div>
+
+<h3>
+<a id="variable" class="anchor" href="#variable" aria-hidden="true"><span class="octicon octicon-link"></span></a>Variable</h3>
+
+<div class="highlight highlight-Swift"><pre><span class="pl-k">var</span> blurRadius: CGFloat</pre></div>
+
+<ul>
+<li>Strength of the blur.</li>
+</ul>
+
+<div class="highlight highlight-Swift"><pre><span class="pl-k">var</span> dynamicMode: DynamicBlurView<span class="pl-k">.</span>DynamicMode</pre></div>
+
+<ul>
+<li>Mode for update frequency.</li>
+<li>
+<code>Common</code> is constantly updated.</li>
+<li>
+<code>Tracking</code> is only during scrolling update.<br>
+</li>
+<li>
+<code>None</code> is not update.</li>
+</ul>
+
+<div class="highlight highlight-swift"><pre><span class="pl-k">var</span> blendColor: UIColor?</pre></div>
+
+<ul>
+<li>Blend in the blurred image.</li>
+</ul>
+
+<div class="highlight highlight-swift"><pre><span class="pl-k">var</span> iterations: <span class="pl-c1">Int</span></pre></div>
+
+<ul>
+<li>Number of times for blur.</li>
+<li>Default is 3.</li>
+</ul>
+
+<div class="highlight highlight-swift"><pre><span class="pl-k">var</span> fullScreenCapture: <span class="pl-c1">Bool</span></pre></div>
+
+<ul>
+<li>Please be on true if the if Layer is not captured. Such as UINavigationBar and UIToolbar. Can be used only with DynamicMode.None.</li>
+<li>Default is false.</li>
+</ul>
+
+<div class="highlight highlight-swift"><pre><span class="pl-k">var</span> blurRatio: CGFloat</pre></div>
+
+<ul>
+<li>Ratio of radius.</li>
+<li>Defauot is 1.<br>
+</li>
+</ul>
+
+<h3>
+<a id="function" class="anchor" href="#function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Function</h3>
+
+<div class="highlight highlight-swift"><pre><span class="pl-k">func</span> <span class="pl-en">refresh</span>()</pre></div>
+
+<ul>
+<li>Get blur image again. for DynamicMode.None</li>
+</ul>
+
+<div class="highlight highlight-swift"><pre><span class="pl-k">func</span> <span class="pl-en">remove</span>()</pre></div>
+
+<ul>
+<li>Delete blur image. for DynamicMode.None</li>
+</ul>
+
+<h2>
+<a id="acknowledgements" class="anchor" href="#acknowledgements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Acknowledgements</h2>
+
+<ul>
+<li>Inspired by <a href="https://github.com/nicklockwood/FXBlurView">FXBlurView</a> in <a href="https://github.com/nicklockwood">nicklockwood</a>.</li>
+</ul>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>LICENSE</h2>
+
+<p>Under the MIT license. See LICENSE file for details.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/KyoheiG3/DynamicBlurView">Dynamicblurview</a> is maintained by <a href="https://github.com/KyoheiG3">KyoheiG3</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
