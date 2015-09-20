@@ -1,11 +1,13 @@
 # DynamicBlurView
 
-[![Carthage Compatibility](https://img.shields.io/badge/carthage-✓-f2a77e.svg?style=flat)](https://github.com/Carthage/Carthage/)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/DynamicBlurView.svg?style=flat)](http://cocoadocs.org/docsets/DynamicBlurView)
 [![License](https://img.shields.io/cocoapods/l/DynamicBlurView.svg?style=flat)](http://cocoadocs.org/docsets/DynamicBlurView)
 [![Platform](https://img.shields.io/cocoapods/p/DynamicBlurView.svg?style=flat)](http://cocoadocs.org/docsets/DynamicBlurView)
 
 DynamicBlurView is a dynamic and high performance UIView subclass for Blur.
+
+#### [Appetize's Demo](https://appetize.io/app/9pvxr367tm0jj2bcy8zavxnqkg?device=iphone6&scale=75&orientation=portrait)
 
 * Demo gif  
 ![Gif](https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/home.gif)
