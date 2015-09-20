@@ -11,10 +11,11 @@ import Accelerate
 
 public class DynamicBlurView: UIView {
     private class BlurLayer: CALayer {
+        static let BlurRadiusKey = "blurRadius"
         @NSManaged var blurRadius: CGFloat
         
         override class func needsDisplayForKey(key: String) -> Bool {
-            if key == "blurRadius" {
+            if key == BlurRadiusKey {
                 return true
             }
             return super.needsDisplayForKey(key)
@@ -52,6 +53,14 @@ public class DynamicBlurView: UIView {
         }
         
         return blurLayer
+    }
+    
+    private var queue: dispatch_queue_t {
+        if respondsToSelector("maskView") { // #available (iOS 8.0, *)
+            return dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)
+        } else {
+            return dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)
+        }
     }
     
     public var blurRadius: CGFloat {
@@ -116,7 +125,7 @@ public class DynamicBlurView: UIView {
     }
     
     public override func actionForLayer(layer: CALayer, forKey event: String) -> CAAction? {
-        if event == "blurRadius" {
+        if event == BlurLayer.BlurRadiusKey {
             fromBlurRadius = nil
             
             if dynamicMode == .None {
@@ -163,7 +172,7 @@ public class DynamicBlurView: UIView {
             blurRadius = blurLayer.blurRadius
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        dispatch_async(queue) {
             if let capture = self.staticImage ?? self.capturedImage() {
                 self.setCaptureImage(capture, radius: blurRadius)
             }
@@ -202,7 +211,7 @@ public class DynamicBlurView: UIView {
         }
         
         if NSThread.currentThread().isMainThread {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), setImage)
+            dispatch_async(queue, setImage)
         } else {
             setImage()
         }
