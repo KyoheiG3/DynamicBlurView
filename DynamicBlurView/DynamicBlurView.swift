@@ -79,7 +79,10 @@ public class DynamicBlurView: UIView {
     
     /// Blend color.
     public var blendColor: UIColor?
-    
+
+	/// Blend mode.
+    public var blendMode: CGBlendMode = CGBlendMode.PlusLighter
+
     /// Default is 3.
     public var iterations: Int = 3
     
@@ -203,7 +206,7 @@ public class DynamicBlurView: UIView {
     
     private func setCaptureImage(image: UIImage, radius: CGFloat) {
         let setImage: (() -> Void) = {
-            if let blurredImage = image.blurredImage(radius, iterations: self.iterations, ratio: self.blurRatio, blendColor: self.blendColor) {
+            if let blurredImage = image.blurredImage(radius, iterations: self.iterations, ratio: self.blurRatio, blendColor: self.blendColor, blendMode: self.blendMode) {
                 dispatch_sync(dispatch_get_main_queue()) {
                     self.setContentImage(blurredImage)
                 }
@@ -294,7 +297,7 @@ public class DynamicBlurView: UIView {
 }
 
 public extension UIImage {
-    func blurredImage(radius: CGFloat, iterations: Int, ratio: CGFloat, blendColor: UIColor?) -> UIImage! {
+    func blurredImage(radius: CGFloat, iterations: Int, ratio: CGFloat, blendColor: UIColor?, blendMode: CGBlendMode) -> UIImage! {
         if floorf(Float(size.width)) * floorf(Float(size.height)) <= 0.0 || radius <= 0 {
             return self
         }
@@ -346,7 +349,7 @@ public extension UIImage {
         
         if let color = blendColor {
             CGContextSetFillColorWithColor(bitmapContext, color.CGColor)
-            CGContextSetBlendMode(bitmapContext, CGBlendMode.PlusLighter)
+            CGContextSetBlendMode(bitmapContext, blendMode)
             CGContextFillRect(bitmapContext, CGRect(x: 0, y: 0, width: width, height: height))
         }
         
