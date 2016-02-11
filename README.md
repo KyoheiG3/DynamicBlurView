@@ -24,7 +24,7 @@ DynamicBlurView is a dynamic and high performance UIView subclass for Blur.
 
 ### iOS 8+
 
-#### Cocoapods
+#### CocoaPods
 
 Add the following to your `Podfile`:
 
