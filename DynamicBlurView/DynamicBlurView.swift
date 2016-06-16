@@ -48,11 +48,13 @@ public class DynamicBlurView: UIView {
     }
     
     private var blurPresentationLayer: BlurLayer {
-        if let layer = blurLayer.presentationLayer() as? BlurLayer {
-            return layer
-        }
-        
-        return blurLayer
+		guard let layer = blurLayer.presentationLayer() else {
+			return blurLayer
+		}
+		guard let blayer = layer as? BlurLayer else {
+			return blurLayer
+		}
+		return blayer
     }
     
     private var queue: dispatch_queue_t {
@@ -248,11 +250,13 @@ public class DynamicBlurView: UIView {
         }
     }
     
-    private func capturedImage() -> UIImage! {
+    private func capturedImage() -> UIImage? {
         let bounds = blurLayer.convertRect(blurLayer.bounds, toLayer: superview?.layer)
-        
+		
         UIGraphicsBeginImageContextWithOptions(bounds.size, true, 1)
-        let context = UIGraphicsGetCurrentContext()
+		guard let context = UIGraphicsGetCurrentContext() else {
+			return nil
+		}
         CGContextSetInterpolationQuality(context, CGInterpolationQuality.None)
         CGContextTranslateCTM(context, -bounds.origin.x, -bounds.origin.y)
         
@@ -294,12 +298,14 @@ public class DynamicBlurView: UIView {
 }
 
 public extension UIImage {
-    func blurredImage(radius: CGFloat, iterations: Int, ratio: CGFloat, blendColor: UIColor?) -> UIImage! {
+    func blurredImage(radius: CGFloat, iterations: Int, ratio: CGFloat, blendColor: UIColor?) -> UIImage? {
         if floorf(Float(size.width)) * floorf(Float(size.height)) <= 0.0 || radius <= 0 {
             return self
         }
         
-        let imageRef = CGImage
+		guard let imageRef = self.CGImage else {
+			return nil
+		}
         var boxSize = UInt32(radius * scale * ratio)
         if boxSize % 2 == 0 {
             boxSize++
@@ -319,8 +325,16 @@ public extension UIImage {
         let tempFlags = vImage_Flags(kvImageEdgeExtend + kvImageGetTempBufferSize)
         let tempSize = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, nil, 0, 0, boxSize, boxSize, nil, tempFlags)
         let tempBuffer = malloc(tempSize)
-        
-        let provider = CGImageGetDataProvider(imageRef)
+		
+		defer {
+			free(outBuffer.data)
+			free(tempBuffer)
+			free(inBuffer.data)
+		}
+		
+		guard let provider = CGImageGetDataProvider(imageRef) else {
+			return nil
+		}
         let copy = CGDataProviderCopyData(provider)
         let source = CFDataGetBytePtr(copy)
         memcpy(inBuffer.data, source, bytes)
@@ -335,15 +349,14 @@ public extension UIImage {
         }
         
         
-        let colorSpace = CGImageGetColorSpace(imageRef)
+		guard let colorSpace = CGImageGetColorSpace(imageRef) else {
+			return nil
+		}
         let bitmapInfo = CGImageGetBitmapInfo(imageRef)
-        let bitmapContext = CGBitmapContextCreate(inBuffer.data, width, height, 8, rowBytes, colorSpace, bitmapInfo.rawValue)
-        defer {
-            free(outBuffer.data)
-            free(tempBuffer)
-            free(inBuffer.data)
-        }
-        
+		guard let bitmapContext = CGBitmapContextCreate(inBuffer.data, width, height, 8, rowBytes, colorSpace, bitmapInfo.rawValue) else {
+			return nil
+		}
+			
         if let color = blendColor {
             CGContextSetFillColorWithColor(bitmapContext, color.CGColor)
             CGContextSetBlendMode(bitmapContext, CGBlendMode.PlusLighter)
