@@ -253,7 +253,6 @@ public class DynamicBlurView: UIView {
 
         UIGraphicsBeginImageContextWithOptions(bounds.size, true, 0)
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetInterpolationQuality(context, CGInterpolationQuality.None)
         CGContextTranslateCTM(context, -bounds.origin.x, -bounds.origin.y)
         
         if NSThread.currentThread().isMainThread {
