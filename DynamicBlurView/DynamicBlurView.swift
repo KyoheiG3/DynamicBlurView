@@ -253,10 +253,9 @@ public class DynamicBlurView: UIView {
     
     private func capturedImage() -> UIImage! {
         let bounds = blurLayer.convertRect(blurLayer.bounds, toLayer: superview?.layer)
-        
-        UIGraphicsBeginImageContextWithOptions(bounds.size, true, 1)
+
+        UIGraphicsBeginImageContextWithOptions(bounds.size, true, 0)
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetInterpolationQuality(context, CGInterpolationQuality.None)
         CGContextTranslateCTM(context, -bounds.origin.x, -bounds.origin.y)
         
         if NSThread.currentThread().isMainThread {
