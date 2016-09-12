@@ -10,7 +10,7 @@ import UIKit
 import Accelerate
 
 open class DynamicBlurView: UIView {
-    fileprivate class BlurLayer: CALayer {
+    private class BlurLayer: CALayer {
         static let BlurRadiusKey = "blurRadius"
         @NSManaged var blurRadius: CGFloat
         
@@ -39,15 +39,41 @@ open class DynamicBlurView: UIView {
         }
     }
     
-    fileprivate var staticImage: UIImage?
-    fileprivate var fromBlurRadius: CGFloat?
-    fileprivate var displayLink: CADisplayLink?
-    fileprivate let DisplayLinkSelector: Selector = #selector(DynamicBlurView.displayDidRefresh(_:))
-    fileprivate var blurLayer: BlurLayer {
+    public enum CaptureImageQuality {
+        case `default`
+        case low
+        case medium
+        case high
+        
+        var imageScale: CGFloat {
+            switch self {
+            case .default, .high:
+                return 0
+            case .low, .medium:
+                return  1
+            }
+        }
+        
+        var contextInterpolation: CGInterpolationQuality {
+            switch self {
+            case .default, .low:
+                return .none
+            case .medium, .high:
+                return .default
+            }
+        }
+
+    }
+    
+    private var staticImage: UIImage?
+    private var fromBlurRadius: CGFloat?
+    private var displayLink: CADisplayLink?
+    private let DisplayLinkSelector: Selector = #selector(DynamicBlurView.displayDidRefresh(_:))
+    private var blurLayer: BlurLayer {
         return layer as! BlurLayer
     }
     
-    fileprivate var blurPresentationLayer: BlurLayer {
+    private var blurPresentationLayer: BlurLayer {
         if let layer = blurLayer.presentation() {
             return layer
         }
@@ -55,7 +81,7 @@ open class DynamicBlurView: UIView {
         return blurLayer
     }
     
-    fileprivate var queue: DispatchQueue {
+    private var queue: DispatchQueue {
         if #available (iOS 8.0, *) {
             return DispatchQueue.global(qos: .userInteractive)
         } else {
@@ -99,6 +125,9 @@ open class DynamicBlurView: UIView {
             }
         }
     }
+    
+    /// Quality of captured image.
+    open var quality: CaptureImageQuality = .default
     
     open override class var layerClass : AnyClass {
         return BlurLayer.self
@@ -198,13 +227,13 @@ open class DynamicBlurView: UIView {
         layer.contents = nil
     }
     
-    fileprivate func linkForDisplay() {
+    private func linkForDisplay() {
         displayLink?.invalidate()
         displayLink = UIScreen.main.displayLink(withTarget: self, selector: DisplayLinkSelector)
         displayLink?.add(to: RunLoop.main, forMode: RunLoopMode(rawValue: dynamicMode.mode()))
     }
     
-    fileprivate func setCaptureImage(_ image: UIImage, radius: CGFloat) {
+    private func setCaptureImage(_ image: UIImage, radius: CGFloat) {
         let setImage: (() -> Void) = {
             if let blurredImage = image.blurredImage(radius, iterations: self.iterations, ratio: self.blurRatio, blendColor: self.blendColor, blendMode: self.blendMode) {
                 DispatchQueue.main.sync {
@@ -220,12 +249,12 @@ open class DynamicBlurView: UIView {
         }
     }
     
-    fileprivate func setContentImage(_ image: UIImage) {
+    private func setContentImage(_ image: UIImage) {
         layer.contents = image.cgImage
         layer.contentsScale = image.scale
     }
     
-    fileprivate func prepareLayer() -> [CALayer]? {
+    private func prepareLayer() -> [CALayer]? {
         let sublayers = superview?.layer.sublayers
         
         return sublayers?.reduce([], { acc, layer -> [CALayer] in
@@ -245,20 +274,20 @@ open class DynamicBlurView: UIView {
         })
     }
     
-    fileprivate func restoreLayer(_ layers: [CALayer]) {
+    private func restoreLayer(_ layers: [CALayer]) {
         for layer in layers {
             layer.isHidden = false
         }
     }
     
-    fileprivate func capturedImage() -> UIImage? {
+    private func capturedImage() -> UIImage? {
         let bounds = blurLayer.convert(blurLayer.bounds, to: superview?.layer)
         
-        UIGraphicsBeginImageContextWithOptions(bounds.size, true, 1)
+        UIGraphicsBeginImageContextWithOptions(bounds.size, true, quality.imageScale)
         guard let context = UIGraphicsGetCurrentContext() else {
             return nil
         }
-        context.interpolationQuality = .none
+        context.interpolationQuality = quality.contextInterpolation
         context.translateBy(x: -bounds.origin.x, y: -bounds.origin.y)
         
         if Thread.current.isMainThread {
@@ -275,7 +304,7 @@ open class DynamicBlurView: UIView {
         return image
     }
     
-    fileprivate func renderInContext(_ ctx: CGContext!) {
+    private func renderInContext(_ ctx: CGContext!) {
         let layers = prepareLayer()
         
         if fullScreenCapture && dynamicMode == .none {
