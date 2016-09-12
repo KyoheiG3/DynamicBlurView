@@ -22,7 +22,7 @@ DynamicBlurView is a dynamic and high performance UIView subclass for Blur.
 
 ## Requirements
 
-- Swift 2.3
+- Swift 3.0
 - iOS 7.0 or later
 
 ## How to Install DynamicBlurView
@@ -118,6 +118,10 @@ var blurRatio: CGFloat
 * Ratio of radius.
 * Defauot is 1.  
 
+```swift
+var quality: CaptureImageQuality
+```
+* Quality of captured image.
 
 ### Function
 
