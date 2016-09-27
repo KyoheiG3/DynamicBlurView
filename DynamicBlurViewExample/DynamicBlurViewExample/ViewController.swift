@@ -34,11 +34,11 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         navigationBar.backgroundColor = UIColor(white: 1, alpha: 0.3)
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < 0 {
             scrollBlurView.alpha = 1
             bottomBlurView.alpha = 1
@@ -60,19 +60,19 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    @IBAction func buttonTap(sender: UIButton) {
-        UIView.animateWithDuration(0.5, animations: {
+    @IBAction func buttonTap(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.5, animations: {
             self.scrollBlurView.blurRadius = 0
             self.bottomBlurView.blurRadius = 0
             }, completion: { _ in
-                UIView.animateWithDuration(0.5) {
+                UIView.animate(withDuration: 0.5, animations: {
                     self.scrollBlurView.blurRadius = CGFloat(self.slider.value)
                     self.bottomBlurView.blurRadius = CGFloat(self.slider.value)
-                }
+                }) 
         })
     }
     
-    @IBAction func sliderChange(sender: UISlider) {
+    @IBAction func sliderChange(_ sender: UISlider) {
         scrollBlurView.blurRadius = CGFloat(sender.value)
         bottomBlurView.blurRadius = CGFloat(sender.value)
     }
