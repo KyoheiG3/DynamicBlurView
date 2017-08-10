@@ -283,7 +283,7 @@ open class DynamicBlurView: UIView {
     private func capturedImage() -> UIImage? {
         let bounds = blurLayer.convert(blurLayer.bounds, to: superview?.layer)
         
-        UIGraphicsBeginImageContextWithOptions(bounds.size, true, quality.imageScale)
+        UIGraphicsBeginImageContextWithOptions(bounds.size, false, quality.imageScale)
         guard let context = UIGraphicsGetCurrentContext() else {
             return nil
         }
