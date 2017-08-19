@@ -9,10 +9,8 @@ DynamicBlurView is a dynamic and high performance UIView subclass for Blur.
 
 #### [Appetize's Demo](https://appetize.io/app/9pvxr367tm0jj2bcy8zavxnqkg?device=iphone6&scale=75&orientation=portrait)
 
-- Demo gif
 ![Gif](https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/home.gif)
 
-- Image capture
 ![Gif](https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/home.png)
 
 
@@ -146,7 +144,7 @@ func remove()
 func animate()
 ```
 
--Should use when needs to change layout with animation when is set none of tracking mode.
+- Should use when needs to change layout with animation when is set none of tracking mode.
 
 ## Acknowledgements
 
