@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C71401761F3E894A00F41421 /* UIImage+Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71401751F3E894A00F41421 /* UIImage+Blur.swift */; };
+		C714017D1F426E8700F41421 /* BlurLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C714017C1F426E8600F41421 /* BlurLayer.swift */; };
+		C73390791F46721A00617D26 /* CGImage+Accelerate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73390781F46721800617D26 /* CGImage+Accelerate.swift */; };
+		C733907B1F467D2B00617D26 /* CaptureQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733907A1F467D2B00617D26 /* CaptureQuality.swift */; };
+		C733907D1F467E0700617D26 /* TrackingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733907C1F467E0700617D26 /* TrackingMode.swift */; };
+		C733907F1F467E7100617D26 /* CGContext+CGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733907E1F467E7100617D26 /* CGContext+CGImage.swift */; };
 		C7F3104F1AD572FB006D95AD /* DynamicBlurView.h in Headers */ = {isa = PBXBuildFile; fileRef = C7F3104E1AD572FB006D95AD /* DynamicBlurView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C7F310551AD572FB006D95AD /* DynamicBlurView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7F310491AD572FB006D95AD /* DynamicBlurView.framework */; };
 		C7F3105C1AD572FB006D95AD /* DynamicBlurViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F3105B1AD572FB006D95AD /* DynamicBlurViewTests.swift */; };
@@ -24,6 +30,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C71401751F3E894A00F41421 /* UIImage+Blur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Blur.swift"; sourceTree = "<group>"; };
+		C714017C1F426E8600F41421 /* BlurLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurLayer.swift; sourceTree = "<group>"; };
+		C73390781F46721800617D26 /* CGImage+Accelerate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+Accelerate.swift"; sourceTree = "<group>"; };
+		C733907A1F467D2B00617D26 /* CaptureQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureQuality.swift; sourceTree = "<group>"; };
+		C733907C1F467E0700617D26 /* TrackingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingMode.swift; sourceTree = "<group>"; };
+		C733907E1F467E7100617D26 /* CGContext+CGImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGContext+CGImage.swift"; sourceTree = "<group>"; };
 		C7F310491AD572FB006D95AD /* DynamicBlurView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DynamicBlurView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F3104D1AD572FB006D95AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C7F3104E1AD572FB006D95AD /* DynamicBlurView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DynamicBlurView.h; sourceTree = "<group>"; };
@@ -73,8 +85,14 @@
 		C7F3104B1AD572FB006D95AD /* DynamicBlurView */ = {
 			isa = PBXGroup;
 			children = (
+				C714017C1F426E8600F41421 /* BlurLayer.swift */,
+				C733907A1F467D2B00617D26 /* CaptureQuality.swift */,
+				C733907E1F467E7100617D26 /* CGContext+CGImage.swift */,
+				C73390781F46721800617D26 /* CGImage+Accelerate.swift */,
 				C7F3104E1AD572FB006D95AD /* DynamicBlurView.h */,
 				C7F310651AD573D5006D95AD /* DynamicBlurView.swift */,
+				C733907C1F467E0700617D26 /* TrackingMode.swift */,
+				C71401751F3E894A00F41421 /* UIImage+Blur.swift */,
 				C7F3104C1AD572FB006D95AD /* Supporting Files */,
 			);
 			path = DynamicBlurView;
@@ -163,12 +181,12 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = kyohei_ito;
 				TargetAttributes = {
 					C7F310481AD572FB006D95AD = {
 						CreatedOnToolsVersion = 6.2;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0900;
 					};
 					C7F310531AD572FB006D95AD = {
 						CreatedOnToolsVersion = 6.2;
@@ -216,6 +234,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C73390791F46721A00617D26 /* CGImage+Accelerate.swift in Sources */,
+				C733907D1F467E0700617D26 /* TrackingMode.swift in Sources */,
+				C733907B1F467D2B00617D26 /* CaptureQuality.swift in Sources */,
+				C733907F1F467E7100617D26 /* CGContext+CGImage.swift in Sources */,
+				C714017D1F426E8700F41421 /* BlurLayer.swift in Sources */,
+				C71401761F3E894A00F41421 /* UIImage+Blur.swift in Sources */,
 				C7F310661AD573D5006D95AD /* DynamicBlurView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -247,14 +271,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -297,14 +327,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -348,7 +384,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -367,7 +403,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kyoheiito.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
