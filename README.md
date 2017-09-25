@@ -9,26 +9,21 @@ DynamicBlurView is a dynamic and high performance UIView subclass for Blur.
 
 #### [Appetize's Demo](https://appetize.io/app/9pvxr367tm0jj2bcy8zavxnqkg?device=iphone6&scale=75&orientation=portrait)
 
-* Demo gif  
 ![Gif](https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/home.gif)
 
-* Image capture  
 ![Gif](https://github.com/KyoheiG3/assets/blob/master/DynamicBlurView/home.png)
 
 
-* Since using the CADisplayLink, it is a high performance.
-* UIToolbar does not use.
-* Can generate a plurality of BlurView.
+- Since using the CADisplayLink, it is a high performance.
+- Can generate a plurality of BlurView.
 
 ## Requirements
 
-- Swift 3.0
-- iOS 7.0 or later
+- Swift 4.0
+- iOS 8.0 or later
 - tvOS 9.0 or later
 
 ## How to Install DynamicBlurView
-
-### iOS 8+, tvOS
 
 #### CocoaPods
 
@@ -36,9 +31,7 @@ Add the following to your `Podfile`:
 
 ```Ruby
 pod "DynamicBlurView"
-use_frameworks!
 ```
-Note: the `use_frameworks!` is required for pods made in Swift.
 
 #### Carthage
 
@@ -48,20 +41,7 @@ Add the following to your `Cartfile`:
 github "KyoheiG3/DynamicBlurView"
 ```
 
-### iOS 7
-
-Just add everything in the `DynamicBlurView.swift` file to your project.
-
-
 ## Usage
-
-### import
-
-If target is ios8.0 or later, please import the `DynamicBlurView`.
-
-```Swift
-import DynamicBlurView
-```
 
 ### Example
 
@@ -81,65 +61,103 @@ UIView.animateWithDuration(0.5) {
 }
 ```
 
+Ratio
+
+```swift
+blurView.blurRatio = 0.5
+```
+
 ### Variable
+
+```swift
+var drawsAsynchronously: Bool
+```
+
+- When true, it captures displays image and blur it asynchronously. Try to set true if needs more performance.
+- Asynchronous drawing is possibly crash when needs to process on main thread that drawing with animation for example.
+- Default is false.
 
 ```Swift
 var blurRadius: CGFloat
 ```
-* Strength of the blur.
+
+- Strength of the blur.
 
 ```Swift
-var dynamicMode: DynamicBlurView.DynamicMode
+var trackingMode: TrackingMode
 ```
-* Mode for update frequency.
-* `Common` is constantly updated.
-* `Tracking` is only during scrolling update.  
-* `None` is not update.
+
+- Mode for update frequency.
+- `Common` is constantly updated.
+- `Tracking` is only during scrolling update.
+- `None` is not update.
 
 ```swift
 var blendColor: UIColor?
 ```
-* Blend in the blurred image.
+
+- Blend in the blurred image.
 
 ```swift
 var iterations: Int
 ```
-* Number of times for blur.
-* Default is 3.
+
+- Number of times for blur.
+- Default is 3.
 
 ```swift
-var fullScreenCapture: Bool
+var isDeepRendering: Bool
 ```
-* Please be on true if the if Layer is not captured. Such as UINavigationBar and UIToolbar. Can be used only with DynamicMode.None.
-* Default is false.
+
+- If the view want to render beyond the layer, should be true.
+- Default is false.
 
 ```swift
 var blurRatio: CGFloat
 ```
-* Ratio of radius.
-* Defauot is 1.  
+
+- When none of tracking mode, it can change the radius of blur with the ratio. Should set from 0 to 1.
+- Defauot is 1.
 
 ```swift
-var quality: CaptureImageQuality
+var quality: CaptureQuality
 ```
-* Quality of captured image.
+
+- Quality of captured image.
+- Default is medium.
 
 ### Function
 
 ```swift
 func refresh()
 ```
-* Get blur image again. for DynamicMode.None
+
+- Remove cache of blur image then get it again.
 
 ```swift
 func remove()
 ```
-* Delete blur image. for DynamicMode.None
 
+- Remove cache of blur image.
+
+```swift
+func animate()
+```
+
+- Should use when needs to change layout with animation when is set none of tracking mode.
 
 ## Acknowledgements
 
-* Inspired by [FXBlurView](https://github.com/nicklockwood/FXBlurView) in [nicklockwood](https://github.com/nicklockwood).
+- Inspired by [FXBlurView](https://github.com/nicklockwood/FXBlurView) in [nicklockwood](https://github.com/nicklockwood).
+
+## Author
+
+#### Kyohei Ito
+
+- [GitHub](https://github.com/kyoheig3)
+- [Twitter](https://twitter.com/kyoheig3)
+
+Follow me 🎉
 
 ## LICENSE
 
