@@ -17,6 +17,7 @@
 		C7F310551AD572FB006D95AD /* DynamicBlurView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7F310491AD572FB006D95AD /* DynamicBlurView.framework */; };
 		C7F3105C1AD572FB006D95AD /* DynamicBlurViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F3105B1AD572FB006D95AD /* DynamicBlurViewTests.swift */; };
 		C7F310661AD573D5006D95AD /* DynamicBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F310651AD573D5006D95AD /* DynamicBlurView.swift */; };
+		DFC8C8AD1FD842E9000E0B88 /* cat.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DFC8C8AC1FD842E9000E0B88 /* cat.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		C7F3105A1AD572FB006D95AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C7F3105B1AD572FB006D95AD /* DynamicBlurViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicBlurViewTests.swift; sourceTree = "<group>"; };
 		C7F310651AD573D5006D95AD /* DynamicBlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicBlurView.swift; sourceTree = "<group>"; };
+		DFC8C8AC1FD842E9000E0B88 /* cat.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 		C7F310581AD572FB006D95AD /* DynamicBlurViewTests */ = {
 			isa = PBXGroup;
 			children = (
+				DFC8C8AC1FD842E9000E0B88 /* cat.jpg */,
 				C7F3105B1AD572FB006D95AD /* DynamicBlurViewTests.swift */,
 				C7F310591AD572FB006D95AD /* Supporting Files */,
 			);
@@ -224,6 +227,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFC8C8AD1FD842E9000E0B88 /* cat.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
