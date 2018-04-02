@@ -12,10 +12,10 @@ open class DynamicBlurView: UIView {
     open override class var layerClass : AnyClass {
         return BlurLayer.self
     }
-
-    private var staticImage: UIImage?
-    private var displayLink: CADisplayLink?
-    private var blurLayer: BlurLayer {
+    
+    fileprivate var staticImage: UIImage?
+    fileprivate var displayLink: CADisplayLink?
+    fileprivate var blurLayer: BlurLayer {
         return layer as! BlurLayer
     }
     private let mainQueue = DispatchQueue.main
@@ -26,14 +26,14 @@ open class DynamicBlurView: UIView {
             return .global(priority: .high)
         }
     }()
-    private var renderingTarget: UIView? {
+    fileprivate var renderingTarget: UIView? {
         if isDeepRendering {
             return window
         } else {
             return superview
         }
     }
-
+    
     /// When true, it captures displays image and blur it asynchronously. Try to set true if needs more performance.
     /// Asynchronous drawing is possibly crash when needs to process on main thread that drawing with animation for example.
     open var drawsAsynchronously: Bool = false
@@ -52,7 +52,7 @@ open class DynamicBlurView: UIView {
     }
     /// Blend color.
     open var blendColor: UIColor?
-	/// Blend mode.
+    /// Blend mode.
     open var blendMode: CGBlendMode = .plusLighter
     /// Default is 3.
     open var iterations: Int = 3
@@ -68,28 +68,28 @@ open class DynamicBlurView: UIView {
     }
     /// Quality of captured image.
     open var quality: CaptureQuality = .medium
-
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
         isUserInteractionEnabled = false
     }
-
+    
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         isUserInteractionEnabled = false
     }
-
+    
     open override func didMoveToWindow() {
         super.didMoveToWindow()
-
+        
         if let view = renderingTarget, window != nil && trackingMode == .none {
             staticImage = snapshotImage(for: view.layer, conversion: !isDeepRendering)
         }
     }
-
+    
     open override func didMoveToSuperview() {
         super.didMoveToSuperview()
-
+        
         if superview == nil {
             displayLink?.invalidate()
             displayLink = nil
@@ -97,7 +97,7 @@ open class DynamicBlurView: UIView {
             linkForDisplay()
         }
     }
-
+    
     private func async(on queue: DispatchQueue, actions: @escaping () -> Void) {
         if drawsAsynchronously {
             queue.async(execute: actions)
@@ -105,7 +105,7 @@ open class DynamicBlurView: UIView {
             actions()
         }
     }
-
+    
     private func sync(on queue: DispatchQueue, actions: () -> Void) {
         if drawsAsynchronously {
             queue.sync(execute: actions)
@@ -113,8 +113,8 @@ open class DynamicBlurView: UIView {
             actions()
         }
     }
-
-    private func draw(_ image: UIImage, blurRadius radius: CGFloat, fixes isFixes: Bool, baseLayer: CALayer?) {
+    
+    fileprivate func draw(_ image: UIImage, blurRadius radius: CGFloat, fixes isFixes: Bool, baseLayer: CALayer?) {
         async(on: globalQueue) { [weak self] in
             if let me = self, let blurredImage = image.blurred(radius: radius, iterations: me.iterations, ratio: me.blurRatio, blendColor: me.blendColor, blendMode: me.blendMode) {
                 me.sync(on: me.mainQueue) {
@@ -123,7 +123,7 @@ open class DynamicBlurView: UIView {
             }
         }
     }
-
+    
     private func blurLayerRect(to layer: CALayer, conversion: Bool) -> CGRect {
         if conversion {
             let presentationLayer = blurLayer.presentation() ?? blurLayer
@@ -132,19 +132,19 @@ open class DynamicBlurView: UIView {
             return layer.bounds
         }
     }
-
-    private func snapshotImage(for layer: CALayer, conversion: Bool) -> UIImage? {
+    
+    fileprivate func snapshotImage(for layer: CALayer, conversion: Bool) -> UIImage? {
         let rect = blurLayerRect(to: layer, conversion: conversion)
         guard let context = CGContext.imageContext(with: quality, rect: rect, opaque: isOpaque) else {
             return nil
         }
-
+        
         blurLayer.render(in: context, for: layer)
-
+        
         defer {
             UIGraphicsEndImageContext()
         }
-
+        
         return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
@@ -160,12 +160,12 @@ extension DynamicBlurView {
 }
 
 extension DynamicBlurView {
-    private func linkForDisplay() {
+    fileprivate func linkForDisplay() {
         displayLink?.invalidate()
         displayLink = UIScreen.main.displayLink(withTarget: self, selector: #selector(DynamicBlurView.displayDidRefresh(_:)))
         displayLink?.add(to: .main, forMode: RunLoopMode(rawValue: trackingMode.description))
     }
-
+    
     @objc private func displayDidRefresh(_ displayLink: CADisplayLink) {
         display(layer)
     }
@@ -179,7 +179,7 @@ extension DynamicBlurView {
         blurRatio = 1
         display(layer)
     }
-
+    
     /// Remove cache of blur image.
     open func remove() {
         blurLayer.refresh()
@@ -187,7 +187,7 @@ extension DynamicBlurView {
         blurRatio = 1
         layer.contents = nil
     }
-
+    
     /// Should use when needs to change layout with animation when is set none of tracking mode.
     public func animate() {
         blurLayer.animate()
