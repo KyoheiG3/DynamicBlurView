@@ -26,6 +26,7 @@ extension CGImage {
     }
 
     func blurred(with boxSize: UInt32, iterations: Int, blendColor: UIColor?, blendMode: CGBlendMode) -> CGImage? {
+        
         guard let providerData = dataProvider?.data else {
             return nil
         }
@@ -62,4 +63,39 @@ extension CGImage {
 
         return context?.makeImage(with: blendColor, blendMode: blendMode, size: size)
     }
+    
+    func isARG8888() -> Bool {
+        return bitsPerPixel == 32 &&
+            bitsPerComponent == 8 &&
+            (bitmapInfo.rawValue & CGBitmapInfo.alphaInfoMask.rawValue) != 0
+    }
+    
+    func createARGBBitmapContext() -> CGContext? {
+        
+        let width = self.width
+        let height = self.height
+        
+        let bitmapBytesPerRow = width * 4
+        let bitmapByteCount = bitmapBytesPerRow * height
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        
+        let bitmapData = malloc(bitmapByteCount)
+        if bitmapData == nil {
+            return nil
+        }
+        
+        let context = CGContext(data: bitmapData, width: width, height: height, bitsPerComponent: 8, bytesPerRow: bitmapBytesPerRow, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
+        
+        return context
+        
+    }
+    
+    func convertToARG8888() -> CGImage? {
+        guard let context = createARGBBitmapContext() else { return nil }
+        let rect = CGRect(x: 0, y: 0, width: width, height: height)
+        context.draw(self, in: rect)
+        return context.makeImage()
+    }
+    
 }

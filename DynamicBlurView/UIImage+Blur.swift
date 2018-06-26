@@ -8,10 +8,15 @@
 
 public extension UIImage {
     func blurred(radius: CGFloat, iterations: Int, ratio: CGFloat, blendColor color: UIColor?, blendMode mode: CGBlendMode) -> UIImage? {
-        guard let cgImage = cgImage else {
+        guard var cgImage = cgImage else {
             return nil
         }
 
+        if !cgImage.isARG8888() {
+            guard let convertedCGImage = cgImage.convertToARG8888() else { return nil }
+            cgImage = convertedCGImage
+        }
+        
         if cgImage.area <= 0 || radius <= 0 {
             return self
         }
