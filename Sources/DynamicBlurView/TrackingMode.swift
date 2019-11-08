@@ -6,6 +6,8 @@
 //  Copyright © 2017年 kyohei_ito. All rights reserved.
 //
 
+import UIKit
+
 public enum TrackingMode: CustomStringConvertible {
     case tracking
     case common

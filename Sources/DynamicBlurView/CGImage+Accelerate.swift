@@ -7,6 +7,7 @@
 //
 
 import Accelerate
+import UIKit
 
 extension CGImage {
     var area: Int {
