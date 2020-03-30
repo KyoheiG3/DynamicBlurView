@@ -6,6 +6,8 @@
 //  Copyright © 2017年 kyohei_ito. All rights reserved.
 //
 
+import UIKit
+
 public enum CaptureQuality {
     case `default`
     case low

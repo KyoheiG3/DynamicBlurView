@@ -6,6 +6,8 @@
 //  Copyright © 2017年 kyohei_ito. All rights reserved.
 //
 
+import UIKit
+
 extension CGContext {
     static func imageContext(with quality: CaptureQuality, rect: CGRect, opaque: Bool) -> CGContext? {
         UIGraphicsBeginImageContextWithOptions(rect.size, opaque, quality.imageScale)
