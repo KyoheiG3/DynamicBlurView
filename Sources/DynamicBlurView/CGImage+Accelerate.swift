@@ -22,6 +22,10 @@ extension CGImage {
         bytesPerRow * height
     }
 
+    var isARG8888: Bool {
+        bitsPerPixel == 32 && bitsPerComponent == 8 && bitmapInfo.contains(.alphaInfoMask)
+    }
+
     func imageBuffer(with data: UnsafeMutableRawPointer?) -> vImage_Buffer {
         vImage_Buffer(data: data, height: vImagePixelCount(height), width: vImagePixelCount(width), rowBytes: bytesPerRow)
     }
@@ -72,5 +76,34 @@ extension CGImage {
         }
 
         return context(with: inBuffer.data)?.makeImage(with: blendColor, blendMode: blendMode, size: size)
+    }
+
+    func createARGBBitmapContext() -> CGContext? {
+        let bitmapBytesPerRow = width * 4
+        let bitmapData = malloc(bitmapBytesPerRow * height)
+
+        defer {
+            free(bitmapData)
+        }
+
+        return CGContext(
+            data: bitmapData,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: bitmapBytesPerRow,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue
+        )
+    }
+
+    func convertToARG8888() -> CGImage? {
+        let context = createARGBBitmapContext()
+        context?.draw(self, in: CGRect(origin: .zero, size: size))
+        return context?.makeImage()
+    }
+
+    func arg8888Image() -> CGImage? {
+        isARG8888 ? self : convertToARG8888()
     }
 }
