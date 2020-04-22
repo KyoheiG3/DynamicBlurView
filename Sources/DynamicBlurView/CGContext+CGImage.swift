@@ -9,7 +9,7 @@
 import UIKit
 
 extension CGContext {
-    static func imageContext(with quality: CaptureQuality, rect: CGRect, opaque: Bool) -> CGContext? {
+    static func imageContext(in rect: CGRect, isOpaque opaque: Bool, quality: CaptureQuality) -> CGContext? {
         UIGraphicsBeginImageContextWithOptions(rect.size, opaque, quality.imageScale)
         guard let context = UIGraphicsGetCurrentContext() else {
             return nil

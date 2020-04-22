@@ -11,19 +11,37 @@ import UIKit
 
 extension CGImage {
     var area: Int {
-        return width * height
+        width * height
     }
 
-    private var size: CGSize {
-        return CGSize(width: width, height: height)
+    var size: CGSize {
+        CGSize(width: width, height: height)
     }
 
-    private var bytes: Int {
-        return bytesPerRow * height
+    var bytes: Int {
+        bytesPerRow * height
     }
 
-    private func imageBuffer(from data: UnsafeMutableRawPointer!) -> vImage_Buffer {
-        return vImage_Buffer(data: data, height: vImagePixelCount(height), width: vImagePixelCount(width), rowBytes: bytesPerRow)
+    var isARG8888: Bool {
+        bitsPerPixel == 32 && bitsPerComponent == 8 && bitmapInfo.contains(.alphaInfoMask)
+    }
+
+    func imageBuffer(with data: UnsafeMutableRawPointer?) -> vImage_Buffer {
+        vImage_Buffer(data: data, height: vImagePixelCount(height), width: vImagePixelCount(width), rowBytes: bytesPerRow)
+    }
+
+    func context(with data: UnsafeMutableRawPointer?) -> CGContext? {
+        colorSpace.flatMap {
+            CGContext(
+                data: data,
+                width: width,
+                height: height,
+                bitsPerComponent: bitsPerComponent,
+                bytesPerRow: bytesPerRow,
+                space: $0,
+                bitmapInfo: bitmapInfo.rawValue
+            )
+        }
     }
 
     func blurred(with boxSize: UInt32, iterations: Int, blendColor: UIColor?, blendMode: CGBlendMode) -> CGImage? {
@@ -32,10 +50,10 @@ extension CGImage {
         }
 
         let inData = malloc(bytes)
-        var inBuffer = imageBuffer(from: inData)
+        var inBuffer = imageBuffer(with: inData)
 
         let outData = malloc(bytes)
-        var outBuffer = imageBuffer(from: outData)
+        var outBuffer = imageBuffer(with: outData)
 
         let tempSize = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, nil, 0, 0, boxSize, boxSize, nil, vImage_Flags(kvImageEdgeExtend + kvImageGetTempBufferSize))
         let tempData = malloc(tempSize)
@@ -57,10 +75,35 @@ extension CGImage {
             outBuffer.data = temp
         }
 
-        let context = colorSpace.flatMap {
-            CGContext(data: inBuffer.data, width: width, height: height, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: $0, bitmapInfo: bitmapInfo.rawValue)
+        return context(with: inBuffer.data)?.makeImage(with: blendColor, blendMode: blendMode, size: size)
+    }
+
+    func createARGBBitmapContext() -> CGContext? {
+        let bitmapBytesPerRow = width * 4
+        let bitmapData = malloc(bitmapBytesPerRow * height)
+
+        defer {
+            free(bitmapData)
         }
 
-        return context?.makeImage(with: blendColor, blendMode: blendMode, size: size)
+        return CGContext(
+            data: bitmapData,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: bitmapBytesPerRow,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue
+        )
+    }
+
+    func convertToARG8888() -> CGImage? {
+        let context = createARGBBitmapContext()
+        context?.draw(self, in: CGRect(origin: .zero, size: size))
+        return context?.makeImage()
+    }
+
+    func arg8888Image() -> CGImage? {
+        isARG8888 ? self : convertToARG8888()
     }
 }

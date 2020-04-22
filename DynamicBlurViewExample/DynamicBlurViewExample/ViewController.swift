@@ -80,6 +80,8 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             scrollBlurView.alpha = 0
             bottomBlurView.alpha = 0
             barTopConstraint.constant = -scrollView.contentInset.top
+            scrollBlurView.blurRatio = 0
+            bottomBlurView.blurRatio = 0
         }
     }
 

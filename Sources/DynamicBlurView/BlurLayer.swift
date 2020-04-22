@@ -8,48 +8,36 @@
 
 import UIKit
 
-private extension CGRect {
-    func rectangle(_ s: CGSize) -> CGRect {
-        let x = origin.x / s.width
-        let y = origin.y / s.height
-        let width = size.width / s.width
-        let height = size.height / s.height
-        return CGRect(x: x, y: y, width: width, height: height)
-    }
-}
-
 class BlurLayer: CALayer {
     private static let blurRadiusKey = "blurRadius"
     private static let blurLayoutKey = "blurLayout"
+    private static let opacityKey = "opacity"
     @NSManaged var blurRadius: CGFloat
     @NSManaged private var blurLayout: CGFloat
 
     private var fromBlurRadius: CGFloat?
-    var presentationRadius: CGFloat {
-        if let radius = fromBlurRadius {
-            if let layer = presentation() {
-                return layer.blurRadius
-            } else {
-                return radius
-            }
-        } else {
-            return blurRadius
-        }
+    var currentBlurRadius: CGFloat {
+        presentation()?.blurRadius ?? fromBlurRadius ?? blurRadius
     }
 
+    var current: Self {
+        presentation() ?? self
+    }
+
+    var quality: CaptureQuality = .medium
+
     override class func needsDisplay(forKey key: String) -> Bool {
-        if key == blurRadiusKey || key == blurLayoutKey {
-            return true
-        }
-        return super.needsDisplay(forKey: key)
+        key == blurRadiusKey || key == blurLayoutKey
+            ? true
+            : super.needsDisplay(forKey: key)
     }
 
     open override func action(forKey event: String) -> CAAction? {
         if event == BlurLayer.blurRadiusKey {
             fromBlurRadius = nil
 
-            if let action = super.action(forKey: "opacity") as? CABasicAnimation {
-                fromBlurRadius = (presentation() ?? self).blurRadius
+            if let action = super.action(forKey: BlurLayer.opacityKey) as? CABasicAnimation {
+                fromBlurRadius = current.blurRadius
 
                 action.keyPath = event
                 action.fromValue = fromBlurRadius
@@ -57,7 +45,7 @@ class BlurLayer: CALayer {
             }
         }
 
-        if event == BlurLayer.blurLayoutKey, let action = super.action(forKey: "opacity") as? CABasicAnimation {
+        if event == BlurLayer.blurLayoutKey, let action = super.action(forKey: BlurLayer.opacityKey) as? CABasicAnimation {
             action.keyPath = event
             action.fromValue = 0
             action.toValue = 1
@@ -69,15 +57,6 @@ class BlurLayer: CALayer {
 }
 
 extension BlurLayer {
-    func draw(_ image: UIImage, fixes isFixes: Bool, baseLayer: CALayer?) {
-        contents = image.cgImage
-        contentsScale = image.scale
-
-        if isFixes, let blurLayer = presentation() {
-            contentsRect = blurLayer.convert(blurLayer.bounds, to: baseLayer).rectangle(image.size)
-        }
-    }
-
     func refresh() {
         fromBlurRadius = nil
     }
@@ -89,43 +68,64 @@ extension BlurLayer {
         blurLayout = 1
     }
 
-    func render(in context: CGContext, for layer: CALayer) {
-        let layers = hideOverlappingLayers(layer.sublayers)
+    func snapshotImageBelowLayer(_ layer: CALayer, in rect: CGRect) -> UIImage? {
+        guard let context = CGContext.imageContext(in: rect, isOpaque: isOpaque, quality: quality) else {
+            return nil
+        }
+
+        renderBelowLayer(layer, in: context)
+
+        defer {
+            UIGraphicsEndImageContext()
+        }
+
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+}
+
+extension CALayer {
+    func draw(_ image: UIImage) {
+        contents = image.cgImage
+        contentsScale = image.scale
+    }
+
+    func renderBelowLayer(_ layer: CALayer, in context: CGContext) {
+        let layers = hideOverlappedLayers(layer.sublayers)
         layer.render(in: context)
         layers.forEach {
             $0.isHidden = false
         }
     }
 
-    private func hideOverlappingLayers(_ layers: [CALayer]?) -> [CALayer] {
+    func hideOverlappedLayers(_ layers: [CALayer]?) -> [CALayer] {
         var hiddenLayers: [CALayer] = []
-        guard let layers = layers else {
-            return hiddenLayers
-        }
-
-        for layer in layers.reversed() {
-            if isHang(to: layer) {
-                return hiddenLayers + hideOverlappingLayers(layer.sublayers)
+        for layer in layers?.reversed() ?? [] {
+            if isHung(in: layer) {
+                hiddenLayers.append(contentsOf: hideOverlappedLayers(layer.sublayers))
+                break
             }
-            if layer.isHidden == false {
+
+            if !layer.isHidden {
                 layer.isHidden = true
                 hiddenLayers.append(layer)
             }
-            if layer == self {
-                return hiddenLayers
+
+            if layer === self {
+                break
             }
         }
         return hiddenLayers
     }
 
-    private func isHang(to target: CALayer) -> Bool {
+    func isHung(in target: CALayer) -> Bool {
         var layer = superlayer
         while layer != nil {
-            if layer == target {
+            if layer === target {
                 return true
             }
             layer = layer?.superlayer
         }
+
         return false
     }
 }
