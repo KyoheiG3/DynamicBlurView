@@ -9,39 +9,37 @@
 import UIKit
 
 open class DynamicBlurView: UIView {
-    open override class var layerClass : AnyClass {
-        return BlurLayer.self
+    open override class var layerClass: AnyClass {
+        BlurLayer.self
+    }
+
+    private var blurLayer: BlurLayer {
+        layer as! BlurLayer
     }
 
     private var staticImage: UIImage?
-    private var displayLink: CADisplayLink?
-    private var blurLayer: BlurLayer {
-        return layer as! BlurLayer
-    }
-    private let mainQueue = DispatchQueue.main
-    private let globalQueue: DispatchQueue = {
-        if #available (iOS 8.0, *) {
-            return .global(qos: .userInteractive)
-        } else {
-            return .global(priority: .high)
-        }
-    }()
-    private var renderingTarget: UIView? {
-        if isDeepRendering {
-            return window
-        } else {
-            return superview
+    private var displayLink: CADisplayLink? {
+        didSet {
+            oldValue?.invalidate()
         }
     }
 
-    /// When true, it captures displays image and blur it asynchronously. Try to set true if needs more performance.
-    /// Asynchronous drawing is possibly crash when needs to process on main thread that drawing with animation for example.
-    open var drawsAsynchronously: Bool = false
+    private var renderingTarget: UIView? {
+        window != nil
+            ? (isDeepRendering ? window : superview)
+            : nil
+    }
+
+    private var relativeLayerRect: CGRect {
+        blurLayer.current.convertRect(to: renderingTarget?.layer)
+    }
+
     /// Radius of blur.
     open var blurRadius: CGFloat {
+        get { blurLayer.blurRadius }
         set { blurLayer.blurRadius = newValue }
-        get { return blurLayer.blurRadius }
     }
+
     /// Default is none.
     open var trackingMode: TrackingMode = .none {
         didSet {
@@ -50,24 +48,33 @@ open class DynamicBlurView: UIView {
             }
         }
     }
+
     /// Blend color.
     open var blendColor: UIColor?
+
 	/// Blend mode.
     open var blendMode: CGBlendMode = .plusLighter
+
     /// Default is 3.
-    open var iterations: Int = 3
+    open var iterations = 3
+
     /// If the view want to render beyond the layer, should be true.
-    open var isDeepRendering: Bool = false
+    open var isDeepRendering = false
+
     /// When none of tracking mode, it can change the radius of blur with the ratio. Should set from 0 to 1.
     open var blurRatio: CGFloat = 1 {
         didSet {
-            if let image = staticImage, oldValue != blurRatio {
-                draw(image, blurRadius: blurRadius, fixes: false, baseLayer: renderingTarget?.layer)
+            if oldValue != blurRatio, let blurredImage = staticImage.flatMap(imageBlurred) {
+                blurLayer.draw(blurredImage)
             }
         }
     }
+
     /// Quality of captured image.
-    open var quality: CaptureQuality = .medium
+    open var quality: CaptureQuality {
+        get { blurLayer.quality }
+        set { blurLayer.quality = newValue }
+    }
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -82,8 +89,9 @@ open class DynamicBlurView: UIView {
     open override func didMoveToWindow() {
         super.didMoveToWindow()
 
-        if let view = renderingTarget, window != nil && trackingMode == .none {
-            staticImage = snapshotImage(for: view.layer, conversion: !isDeepRendering)
+        if trackingMode == .none {
+            renderingTarget?.layoutIfNeeded()
+            staticImage = currentImage()
         }
     }
 
@@ -91,77 +99,43 @@ open class DynamicBlurView: UIView {
         super.didMoveToSuperview()
 
         if superview == nil {
-            displayLink?.invalidate()
             displayLink = nil
         } else {
             linkForDisplay()
         }
     }
 
-    private func async(on queue: DispatchQueue, actions: @escaping () -> Void) {
-        if drawsAsynchronously {
-            queue.async(execute: actions)
-        } else {
-            actions()
-        }
+    func imageBlurred(_ image: UIImage) -> UIImage? {
+        image.blurred(
+            radius: blurLayer.currentBlurRadius,
+            iterations: iterations,
+            ratio: blurRatio,
+            blendColor: blendColor,
+            blendMode: blendMode
+        )
     }
 
-    private func sync(on queue: DispatchQueue, actions: () -> Void) {
-        if drawsAsynchronously {
-            queue.sync(execute: actions)
-        } else {
-            actions()
+    func currentImage() -> UIImage? {
+        renderingTarget.flatMap { view in
+            blurLayer.snapshotImageBelowLayer(view.layer, in: isDeepRendering ? view.bounds : relativeLayerRect)
         }
-    }
-
-    private func draw(_ image: UIImage, blurRadius radius: CGFloat, fixes isFixes: Bool, baseLayer: CALayer?) {
-        async(on: globalQueue) { [weak self] in
-            if let me = self, let blurredImage = image.blurred(radius: radius, iterations: me.iterations, ratio: me.blurRatio, blendColor: me.blendColor, blendMode: me.blendMode) {
-                me.sync(on: me.mainQueue) {
-                    me.blurLayer.draw(blurredImage, fixes: isFixes, baseLayer: baseLayer)
-                }
-            }
-        }
-    }
-
-    private func blurLayerRect(to layer: CALayer, conversion: Bool) -> CGRect {
-        if conversion {
-            let presentationLayer = blurLayer.presentation() ?? blurLayer
-            return presentationLayer.convert(presentationLayer.bounds, to: layer)
-        } else {
-            return layer.bounds
-        }
-    }
-
-    private func snapshotImage(for layer: CALayer, conversion: Bool) -> UIImage? {
-        let rect = blurLayerRect(to: layer, conversion: conversion)
-        guard let context = CGContext.imageContext(with: quality, rect: rect, opaque: isOpaque) else {
-            return nil
-        }
-
-        blurLayer.render(in: context, for: layer)
-
-        defer {
-            UIGraphicsEndImageContext()
-        }
-
-        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
 
 extension DynamicBlurView {
     open override func display(_ layer: CALayer) {
-        let blurRadius = blurLayer.presentationRadius
-        let isFixes = isDeepRendering && staticImage != nil
-        if let view = renderingTarget, let image = staticImage ?? snapshotImage(for: view.layer, conversion: !isFixes) {
-            draw(image, blurRadius: blurRadius, fixes: isFixes, baseLayer: view.layer)
+        if let blurredImage = (staticImage ?? currentImage()).flatMap(imageBlurred) {
+            blurLayer.draw(blurredImage)
+
+            if isDeepRendering {
+                blurLayer.contentsRect = relativeLayerRect.rectangle(blurredImage.size)
+            }
         }
     }
 }
 
 extension DynamicBlurView {
     private func linkForDisplay() {
-        displayLink?.invalidate()
         displayLink = UIScreen.main.displayLink(withTarget: self, selector: #selector(DynamicBlurView.displayDidRefresh(_:)))
         displayLink?.add(to: .main, forMode: RunLoop.Mode(rawValue: trackingMode.description))
     }
