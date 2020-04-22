@@ -17,7 +17,7 @@ DynamicBlurView is a dynamic and high performance UIView subclass for Blur.
 
 ## Requirements
 
-- Swift 4.2
+- Swift 5
 - iOS 8.0 or later
 - tvOS 9.0 or later
 
@@ -66,14 +66,6 @@ blurView.blurRatio = 0.5
 ```
 
 ### Variable
-
-```swift
-var drawsAsynchronously: Bool
-```
-
-- When true, it captures displays image and blur it asynchronously. Try to set true if needs more performance.
-- Asynchronous drawing is possibly crash when needs to process on main thread that drawing with animation for example.
-- Default is false.
 
 ```Swift
 var blurRadius: CGFloat
