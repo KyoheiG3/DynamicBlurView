@@ -23,7 +23,7 @@ extension CGImage {
     }
 
     var isARG8888: Bool {
-        bitsPerPixel == 32 && bitsPerComponent == 8 && bitmapInfo.contains(.alphaInfoMask)
+        bitsPerPixel == 32 && bitsPerComponent == 8 && (bitmapInfo.rawValue & CGBitmapInfo.alphaInfoMask.rawValue) != 0
     }
 
     func imageBuffer(with data: UnsafeMutableRawPointer?) -> vImage_Buffer {
