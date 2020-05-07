@@ -20,7 +20,7 @@ class BlurLayer: CALayer {
         presentation()?.blurRadius ?? fromBlurRadius ?? blurRadius
     }
 
-    var current: Self {
+    var current: BlurLayer {
         presentation() ?? self
     }
 
