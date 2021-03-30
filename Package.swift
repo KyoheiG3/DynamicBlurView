@@ -13,6 +13,10 @@ let package = Package(
         .library(
             name: "DynamicBlurView",
             targets: ["DynamicBlurView"]),
+        .library(
+            name: "DynamicBlurView",
+            type: .dynamic,
+            targets: ["DynamicBlurView"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
