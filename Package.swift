@@ -14,7 +14,7 @@ let package = Package(
             name: "DynamicBlurView",
             targets: ["DynamicBlurView"]),
         .library(
-            name: "DynamicBlurView",
+            name: "DynamicBlurView-Dynamic",
             type: .dynamic,
             targets: ["DynamicBlurView"]),
     ],
