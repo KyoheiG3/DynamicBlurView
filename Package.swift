@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "DynamicBlurView",
     platforms: [
-        .iOS(.v8),
+        .iOS(.v9),
     ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
