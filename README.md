@@ -151,4 +151,4 @@ Follow me 🎉
 
 ## LICENSE
 
-Under the MIT license. See LICENSE file for details.
+Under the MIT license. See [LICENSE](./LICENSE) file for details.
